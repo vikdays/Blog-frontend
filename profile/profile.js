@@ -1,6 +1,5 @@
 const token = localStorage.getItem('token');
 const form = document.getElementById('form');
-const rightMenu = document.getElementById('rightMenu');
 const userEmail = document.getElementById('user-email');
 const dropdownMenu = document.getElementById('dropdownMenu');
 const logoutButton = document.getElementById('logout');
@@ -22,6 +21,7 @@ document.getElementById("logout").addEventListener("click", async (event) => {
 document.getElementById("profile").addEventListener("click", async (event) => {
     window.location.href = './profile.html'; 
 })
+
 
 if (token) {
     fetch('https://blog.kreosoft.space/api/account/profile', {
@@ -54,6 +54,8 @@ if (token) {
         localStorage.setItem('userEmail', data.email);
     });
 } else {
+    showError('Сначала авторизуйтесь')
+    window.location.href = '../authorization/authorization.html'; 
     console.error('Auth token not found in localStorage');
 }
 userEmail.addEventListener('click', () => {

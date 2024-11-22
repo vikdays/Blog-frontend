@@ -9,7 +9,7 @@
   <header class="header">
     <span class="logo">Блог №415</span>
     <div class="wrapper-left">
-      <a href="#">Главная</a>
+      <a href="../main/main.html">Главная</a>
       <a href="#">Авторы</a>
       <a href="#">Группы</a>
     </div>
@@ -89,9 +89,14 @@
             <img src="../images/comment.png" alt="comment" id="comment">
           </div>
           <div class="container-posts-likes">
-            <div id="likes-count">1</div>
-            <img src="../images/heart.png" alt="heart" id="heart">
-          </div>
+            <div id="likes-count">${post.likes}</div>
+             <button class="image-button">
+                <img id="like"
+                   
+                    class="like-img"
+                >
+            </button>
+        </div>
           
         </div>
       </div>
@@ -104,9 +109,8 @@
           <a href="#">&raquo;</a>
         </div>
         <div class="count-post">
-          <label for="size">Число постов на странице</label>
-          <select name="size" id="size">
-              <option value="4" class="count">4</option>
+          <label class="count-post-label" for="size">Число постов на странице</label>
+          <select class="count-post-select" name="size" id="size">
               <option value="5" class="count">5</option>
               <option value="6" class="count">6</option>
               <option value="7" class="count">7</option>

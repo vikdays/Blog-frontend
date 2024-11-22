@@ -1,19 +1,25 @@
-export async function fetchPosts(filters = {}) {
+export async function fetchPosts(filters = {}, token = null) {
     const baseUrl = "https://blog.kreosoft.space/api/post";
     const params = new URLSearchParams();
 
-    // Добавляем параметры только если они определены
     params.append("onlyMyCommunities", filters.onlyMyCommunities || false);
     params.append("page", filters.page || 1);
-    params.append("size", filters.size || 5);
+    params.append("size", filters.size || 20);
 
     if (filters.author) params.append("author", filters.author);
     if (filters.tags && filters.tags.length > 0) params.append("tags", filters.tags.join(" "));
     if (filters.min) params.append("min", filters.min);
     if (filters.max) params.append("max", filters.max);
 
+    let url = `${baseUrl}?${params.toString()}`;
+
+    const headers = {};
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+
     try {
-        const response = await fetch(`${baseUrl}?${params.toString()}`);
+        const response = await fetch(url, { headers });
         if (!response.ok) throw new Error("Failed to fetch posts");
         return await response.json();
     } catch (error) {
@@ -21,12 +27,14 @@ export async function fetchPosts(filters = {}) {
         return { posts: [], pagination: {} }; 
     }
 }
+
 export function renderPosts(posts) {
     const postsContainer = document.querySelector(".container-posts");
     postsContainer.innerHTML = "";
 
     if (posts && posts.length > 0) {
         posts.forEach(post => {
+            console.log("Post data:", post);
             const postElement = document.createElement("div");
             postElement.classList.add("container-posts");
 
@@ -49,7 +57,12 @@ export function renderPosts(posts) {
                     </div>
                     <div class="container-posts-likes">
                         <div id="likes-count">${post.likes}</div>
-                        <img src="../images/love.png" alt="love" id="love">
+                         <button class="image-button" data-id="${post.id}">
+                            <img id="like" class="like-img"
+                                src="${post.hasLike ? "../images/love.png" : "../images/heart.png"}" 
+                                alt="${post.hasLike ? "love" : "heart"}" 
+                            >
+                        </button>
                     </div>
                 </div>
             `;
@@ -60,3 +73,60 @@ export function renderPosts(posts) {
     }
 }
 
+export async function likePost(postId, token) {
+    console.log("Токен:", token); 
+
+    try {
+        const response = await fetch(`https://blog.kreosoft.space/api/post/${postId}/like`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) { 
+            const errorText = await response.text();
+            console.error("Ошибка при лайке. Статус:", response.status, "Ответ:", errorText);
+            return false;
+        }
+
+        console.log("Запрос на лайк выполнен успешно!");
+        return true;
+
+    } catch (error) {
+        console.error("Ошибка при запросе на лайк:", error.message);
+        return false;
+    }
+}
+
+export async function dislikePost(postId, token) {
+    try {
+        const response = await fetch(`https://blog.kreosoft.space/api/post/${postId}/like`, {
+            method: "DELETE",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        return true; 
+    } catch (error) {
+        console.error(error.message);
+        return false;
+    }
+}
+export async function fetchPostDetails(postId, token) {
+    const response = await fetch(`https://blog.kreosoft.space/api/post/${postId}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json'
+        }
+    });
+
+    if (!response.ok) {
+        console.error("Не удалось получить данные о посте");
+        return null;
+    }
+
+    const postData = await response.json();
+    return postData;
+}
