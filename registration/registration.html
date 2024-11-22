@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+  
+  <title>Registration</title>
+</head>
+<body>
+  <header class="header">
+    <span class="logo">Блог №415</span>
+    <div class="wrapper wrapper--left">
+      <div>
+        <ul>
+        <li><a href="#">Главная</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="wrapper wrapper--right">
+      <ul>
+        <li><a href="../authorization/authorization.html">Вход</a></li>
+      </ul>
+    </div>
+  </header>
+  <main>
+    <div class="container">
+      <h2 class="container-register">Регистрация</h2>
+      <div class="container-error" id="error-message"></div>
+      <form class="form" id="form">
+        <div class="container-name" >
+          <label>ФИО</label>
+          <input class="input" type="name" placeholder="Иванов Иван Иванович" name="name" id="name" required>
+          <div class="error"></div>
+        </div>
+        <div class="container-date" >
+          <label>Дата рождения</label>
+          <input class="input" type="date" name="date" id="date" required>
+          <div class="error"></div>
+        </div>
+        <div class="container-gender" >
+          <label>Пол</label>
+          <select class="select" name="gender" id="gender">
+            <option selected value="female">Женщина</option>
+            <option selected value="male">Мужчина</option>
+          </select>
+          <div class="error"></div>
+        </div>
+        <div class="container-phone">
+          <label>Телефон</label>
+          <input class="input" type="phone" placeholder="+7 (xxx) xxx-xx-xx" name="phone" id="phone" required>
+          <div class="error"></div>
+        </div>
+        <div class="container-email">
+          <label>Email</label>
+          <input class="input" type="email" placeholder="name@example.com" name="email" id="email" required>
+          <p>Email будет использоваться для входа в систему</p>
+          <div class="error"></div>
+        </div>
+        <div class="container-psw">
+          <label>Password</label>
+          <input class="input" type="password" name="password" id="password" required>
+          <div class="error"></div>
+        </div>  
+        <button class="register" type="submit" id="register-btn">Зарегистрироваться</button>
+      </form>
+    </div>
+    
+  </main>
+  <footer>
+    <p>© 2022 - Блог №415</p>
+  </footer>
+  <script src="registration.js"></script>
+</body>
+</html>

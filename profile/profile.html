@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+  <title>Profile</title>
+</head>
+<body>
+  <header class="header">
+    <span class="logo">Блог №415</span>
+    <div class="wrapper-left">
+      <a href="#">Главная</a>
+      <a href="#">Написать пост</a>
+    </div>
+    <div class="wrapper-right" id="rightMenu">
+      <div class="user-menu">
+        <span id="user-email" class="user-menu-email"></span>
+        <span class="dropdown-arrow">▼</span>
+          <div class="dropdown-content hidden" id="dropdownMenu">
+              <a href="#" id="profile">Профиль</a>
+              <a href="#" id="logout">Выход</a>
+          </div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="container">
+      <form class="form" id="form">
+        <div class="container-field">
+          <label>Email</label>
+          <input class="input" type="email" placeholder="name@example.com" name="email" id="email" required>
+        </div>
+        <div class="container-field" >
+          <label class="label">ФИО</label>
+          <input class="input" type="name" placeholder="Иванов Иван Иванович" name="name" id="name" required>
+        </div>
+        <div class="container-field">
+          <label>Номер телефона</label>
+          <input class="input" type="phone" placeholder="+7 (xxx) xxx-xx-xx" name="phone" id="phone" required>
+        </div>
+        <div class="container-field" >
+          <label>Пол</label>
+          <select class="select" name="gender" id="gender">
+            <option selected value="Female">Женщина</option>
+            <option selected value="Male">Мужчина</option>
+          </select>
+        </div>
+        <div class="container-field" >
+          <label>Дата рождения</label>
+          <input class="input" type="date" name="date" id="date" required>
+        </div>
+        <div class="message">
+          <div class="message-error" ></div>
+          <div class="message-success"></div>
+        </div>
+        
+        <button class="save-btn" type="save" id="save-btn">Сохранить</button>
+      </form>
+    </div>
+    
+  </main>
+  <footer>
+    <p>© 2022 - Блог №415</p>
+  </footer>
+  <script src="profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+@footer-background: rgb(248,249,250);
+@border-color: rgb(240,240,240);
+@link-color: #000;
+@blue: rgb(13,110,253);
+@grey: rgb(108,117,125);
+@green: rgb(5, 241, 5);
+@red: #ff0000;
+* {
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: Trebuchet MS, sans-serif;
+}
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header{
+    display: flex;
+    padding: 1em 2em;
+    height: 7%;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 13px 10px -15px grey;  
+}
+.logo {
+    font-size: 18px;
+    padding-right: 2em;
+}
+li{
+    list-style: none;
+}
+.wrapper {
+    display: flex;
+    font-size: 1rem;
+
+    &--right {
+        margin-left: auto;
+    }
+}
+a {
+    text-decoration: none;
+    color: @link-color;
+    &:hover{
+        color: @blue;
+    }
+}
+footer {
+    background-color: @footer-background;
+    align-items: center;
+    display: flex;
+    border-top: medium solid @border-color;
+    padding-left: 5em;
+    font-size: 0.8em;
+    color: darken(@border-color, 50%);
+    height: 8%;
+    font-size: 15px;
+}
+main {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+   
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 35%;
+    border: thin solid @border-color;
+    border-radius: 5px; 
+    box-shadow: 0px 10px 20px -5px lighten(@grey, 20%); 
+
+    &-enter{
+        padding-left: 20px;
+        padding-top: 15px;
+        font-size: 30px;
+    }
+    &-error{
+        padding-left: 20px;
+    }
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px;
+}
+input, label, button{
+    width: 100%;
+    height: 35px;
+    border-radius: 5px; 
+}
+.error {
+    color: @red;
+    font-size: 14px;
+    margin-top: 5px;
+    display: block;
+}
+
+.container-email.error input,
+.container-psw.error input {
+    border-color: @red;
+}
+
+.container-email.success input,
+.container-psw.success input {
+    border-color: @green;
+}
+.container{
+    display: flex;
+    flex-direction: column;
+    &-email{
+        padding-bottom: 10px;
+        font-size: 20px;
+
+    }
+    &-psw{
+        padding-bottom: 10px;
+        font-size: 20px;
+    }
+}
+.input {
+    border: thin solid darken(@border-color, 10%);
+    font-size: 18px;
+    padding: 15px;
+}
+.btn{
+    font-size: 18px;
+    border: thin solid @border-color;
+    cursor: pointer;
+    &--login {
+        background-color: @blue;
+        color: white;
+
+        &:hover{
+            background-color: darken(@blue, 5%);
+        }
+    }
+    &--register{
+        background-color: @grey;
+        color: white;
+
+        &:hover{
+            background-color: darken(@grey, 5%);
+        }
+    }
+}
+
+@media(max-width: 1024px){
+    .container{
+        width: 80%;
+    }
+    input, label, button{
+        width: 100%;
+        height: 50px;
+        border-radius: 5px; 
+    }
+}

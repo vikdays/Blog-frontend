@@ -1,0 +1,164 @@
+@footer-background: rgb(248,249,250);
+@border-color: rgb(240,240,240);
+@black: #000;
+@blue: rgb(13,110,253);
+@grey: rgb(108,117,125);
+@green: rgb(5, 241, 5);
+@red: #ff0000;
+* {
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: Trebuchet MS, sans-serif;
+}
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header{
+    display: flex;
+    padding: 1em 2em;
+    height: 7%;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 13px 10px -15px grey;  
+}
+.logo {
+    font-size: 18px;
+    padding-right: 2em;
+}
+li{
+    list-style: none;
+}
+.wrapper {
+    display: flex;
+    &--right {
+        margin-left: auto;
+    }
+}
+a {
+    font-size: 14px;
+    text-decoration: none;
+    color: @black;
+    &:hover{
+        color: @blue;
+    }
+}
+footer {
+    background-color: @footer-background;
+    align-items: center;
+    display: flex;
+    border-top: medium solid @border-color;
+    padding-left: 5em;
+    font-size: 0.8em;
+    color: darken(@border-color, 50%);
+    min-height: 8%;
+    font-size: 15px;
+}
+main {
+    padding: 30px;
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+   
+}
+
+.container {
+    width: 35%; 
+    border: thin solid @border-color;
+    border-radius: 5px; 
+    box-shadow: 0px 10px 20px -5px lighten(@grey, 20%); 
+
+    &-register{
+        font-size: 20px;
+        padding-left: 20px;
+        padding-top: 2%;
+    }
+    &-error{
+        padding-left: 20px;
+    }
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    padding: 20px; 
+    gap: 5px;
+}
+input, label, button, select{
+    width: 100%;
+    height: 35px;
+    font-size: 15px;
+    border-radius: 5px;
+}
+p{
+    color: @grey;
+    font-size: 15px;
+}
+.error {
+    color: @red;
+    font-size: 14px;
+    margin-top: 5px;
+    display: block;
+}
+
+.container-email.error input,
+.container-name.error input,
+.container-date.error input,
+.container-gender.error input,
+.container-phone.error input,
+.container-psw.error input {
+    border-color: @red;
+}
+
+.container-email.success input,
+.container-name.success input,
+.container-date.success input,
+.container-gender.success input,
+.container-phone.success input,
+.container-psw.success input {
+    border-color: @green;
+    
+}
+
+.input, 
+.select {
+    border: thin solid darken(@border-color, 10%);
+    padding: 5px;
+}
+
+.register{
+    font-size: 18px;
+    border: thin solid @border-color;
+    background-color: @blue;
+    height: 35px;
+    color: white;
+    cursor: pointer;
+
+    &:hover{
+        background-color: darken(@blue, 5%);
+    }
+}
+@media(max-width: 800px){
+    .container{
+        width: 100%;
+        height: auto;
+        &-register{
+            font-size: 30px;
+        }
+    }
+    input, label, button, select{
+        width: 100%;
+        height: 70px;
+        border-radius: 5px;
+    }
+    .register{
+        height: 70px;
+        font-size: 30px;
+    }
+    .input, .select, label, p{
+        font-size: 25px;
+    }
+}
