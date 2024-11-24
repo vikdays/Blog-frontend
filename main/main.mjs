@@ -3,16 +3,12 @@ import { renderPosts } from './post.mjs';
 import { fetchPosts } from './post.mjs';
 import { likePost } from './post.mjs';
 import { dislikePost } from './post.mjs';
-import { fetchPostDetails } from './post.mjs';
-
+import { paginate} from './pagination.mjs';
 
 const email = localStorage.getItem('userEmail');
 const token = localStorage.getItem('token');
 const userEmail = document.getElementById('user-email');
 const dropdownMenu = document.getElementById('dropdownMenu');
-const logoutButton = document.getElementById('logout');
-const profileButton = document.getElementById('profile');
-let posts = []
 
 document.getElementById("logout").addEventListener("click", async (event) => {
     const response = await fetch('https://blog.kreosoft.space/api/account/logout', {
@@ -23,18 +19,15 @@ document.getElementById("logout").addEventListener("click", async (event) => {
     })
     localStorage.clear();
     window.location.href = '../authorization/authorization.html'; 
-    console.log(response)
-}
-)
+})
 
 document.getElementById("profile").addEventListener("click", async (event) => {
     window.location.href = '../profile/profile.html'; 
 })
 
 if (userEmail) {
-    userEmail.textContent = email;
+    userEmail.textContent = email || 'Вход';
 } else {
-    userEmail.textContent = 'Вход';
     console.error('email not found in localStorage');
 
 }
@@ -57,33 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-document.addEventListener("DOMContentLoaded", async () => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-        console.log("Пользователь авторизован. Загружаем посты с токеном...");
-        try {
-            const data = await fetchPosts({}, token); 
-            if (data && data.posts) {
-                renderPosts(data.posts); 
-            }
-        } catch (error) {
-            console.error("Ошибка при загрузке постов:", error.message);
-        }
-    } else {
-        console.log("Пользователь не авторизован. Загружаем публичные посты...");
-        try {
-            const data = await fetchPosts(); 
-            if (data && data.posts) {
-                renderPosts(data.posts); 
-            }
-        } catch (error) {
-            console.error("Ошибка при загрузке постов:", error.message);
-        }
-    }
-});
-
-
 document.getElementById("do-btn").addEventListener("click", async (e) => {
     e.preventDefault();
     const filters = {
@@ -93,23 +59,64 @@ document.getElementById("do-btn").addEventListener("click", async (e) => {
         max: document.getElementById("max").value,
         onlyMyCommunities: document.getElementById("onlyMineCommunities").checked,
         size: document.getElementById("size").value,
-        page: 1, 
+        page: document.querySelector('button.active')?.value,
+        postSorting: document.getElementById("postSorting").value,
     };
 
-    const data = await fetchPosts(filters);
-    if (data) {
-        renderPosts(data.posts);
+    try {
+        const data = await fetchPosts(filters, token);
+        if (data && data.posts) {
+            renderPosts(data.posts);
+            paginate(data.pagination, filters, token);
+        } else {
+            console.error("Нет данных для отображения.");
+        }
+    } catch (error) {
+        console.error("Ошибка при загрузке постов:", error.message);
     }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const sizeElement = document.getElementById('size');
+    const pageSize = sizeElement ? parseInt(sizeElement.value, 10) || 5 : 5;
+
+    const getCurrentPage = () => {
+        const activeButton = document.querySelector('button.active');
+        return activeButton ? parseInt(activeButton.value, 10) || 1 : 1;
+    };
+    const loadPage = async () => {
+        const page = getCurrentPage();
+        try {
+            const { posts, pagination } = await fetchPosts({ size: pageSize, page }, token);
+            renderPosts(posts);
+            paginate(pagination, { size: pageSize, page }, token);
+        } catch (error) {
+            console.error("Ошибка при загрузке постов:", error.message);
+        }
+    };
+    loadPage();
+
+    document.addEventListener('click', (event) => {
+        if (event.target.tagName === 'BUTTON' && event.target.classList.contains('active')) {
+            loadPage(); 
+        }
+    });
+});
+
 document.addEventListener("click", async (event) => {
     const button = event.target.closest(".image-button");
     if (!button) return;
 
     const postId = button.dataset.id; 
     const img = button.querySelector("img");
+    const likesCountElement = button.parentElement.querySelector("#likes-count");
+
+    if (!likesCountElement) return; 
+    let likesCount = parseInt(likesCountElement.textContent, 10) || 0; 
 
     if (!token) {
         console.error("User is not authorized. Redirecting to login...");
+        alert("Чтобы оценить пост необходимо авторизоваться.");
         window.location.href = "../authorization/authorization.html";
         return;
     }
@@ -119,12 +126,14 @@ document.addEventListener("click", async (event) => {
         if (success) {
             img.src = "../images/love.png";
             img.alt = "love";
+            likesCountElement.textContent = likesCount + 1;
         }
     } else if (img.alt === "love") {
         const success = await dislikePost(postId, token);
         if (success) {
             img.src = "../images/heart.png";
             img.alt = "heart";
+            likesCountElement.textContent = likesCount - 1;
         }
     }
 });

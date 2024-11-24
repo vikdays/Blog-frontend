@@ -66,7 +66,7 @@ main {
 
 .container{
     min-width: 65%;
-    max-width: 90%;
+    max-width: 70%;
     &-btn{
         width: 100%;
         float: right;
@@ -118,9 +118,6 @@ main {
                     }
                 }
                
-            }
-            label{
-                //font-size: 13px;
             }
 
         }
@@ -196,6 +193,11 @@ main {
                 .post-time{
                     //font-size: 14px;
                 }
+                .post-img{
+                    display: flex;
+                    justify-content: center;
+                    margin-bottom: 5px;
+                }
             }
             
         }
@@ -208,6 +210,11 @@ main {
         margin-bottom: 40px;
         margin-top: 10px;
     }
+}
+
+#post-img{
+    max-width: 500px;
+    max-height: 500px;
 }
 
 .post-btn {
@@ -266,22 +273,29 @@ input, select, .checkbox{
 }
 
 .pagination {
-    a {
-        color: @blue;
-        float: left;
-        padding: 6px 8px;
-        text-decoration: none;
-        border: thin solid @blue;
-        border-radius: 2px;
+    button {
         
-      }
-    a.active {
-        background-color: @blue;
-        color: white;
+        padding: 5px 10px;
         border: 1px solid @blue;
+        border-radius: 3px;
+        background-color: white;
+        color: @blue;
+        cursor: pointer;
+        font-size: 16px;
+
+        &:hover {
+            background-color: #e7f3ff;
+        }
+        &.active {
+            background-color: @blue;
+            color: white;
+            border-color: @blue;
+        }
+        
     }
-    
+
 }
+
 .count-post{
     display: flex;
     flex-direction: column;
@@ -291,9 +305,6 @@ input, select, .checkbox{
         padding: 5px;
         width: 100%;
     }
-    &-label{
-        //font-size: 11px;
-    }
 }
 
 #comment, #like{
@@ -301,7 +312,6 @@ input, select, .checkbox{
     width: 15px;
 }
 .dropdown-content {
-    //font-size: 13px;
     display: none;
     position: absolute;
     background-color: white;
@@ -327,8 +337,6 @@ input, select, .checkbox{
 }
 
 .user-menu {
-    //font-size: 14px;
-   // margin-right: 50px;
     &-email {
         color: black; 
         cursor: pointer; 
@@ -345,7 +353,6 @@ input, select, .checkbox{
 .dropdown-arrow {
     color: black; 
     cursor: pointer; 
-    //font-size: 0.5em; 
     vertical-align: middle; 
 }
 #rightMenu {

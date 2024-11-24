@@ -4,27 +4,26 @@ export async function fetchPosts(filters = {}, token = null) {
 
     params.append("onlyMyCommunities", filters.onlyMyCommunities || false);
     params.append("page", filters.page || 1);
-    params.append("size", filters.size || 20);
+    params.append("size", filters.size || 5);
 
     if (filters.author) params.append("author", filters.author);
-    if (filters.tags && filters.tags.length > 0) params.append("tags", filters.tags.join(" "));
+    if (filters.tags && filters.tags.length > 0) params.append("tags", filters.tags.join(","));
     if (filters.min) params.append("min", filters.min);
     if (filters.max) params.append("max", filters.max);
-
-    let url = `${baseUrl}?${params.toString()}`;
+    if (filters.postSorting) params.append("sorting", filters.postSorting);
 
     const headers = {};
     if (token) {
         headers['Authorization'] = `Bearer ${token}`;
     }
-
+    const url = `${baseUrl}?${params.toString()}`;
     try {
         const response = await fetch(url, { headers });
-        if (!response.ok) throw new Error("Failed to fetch posts");
+        if (!response.ok) throw new Error("Ошибка загрузки постов");
         return await response.json();
     } catch (error) {
-        console.error("Error fetching posts:", error);
-        return { posts: [], pagination: {} }; 
+        console.error("Ошибка при запросе постов:", error.message);
+        return { posts: [], pagination: { size: 0, count: 0, current: 1 } };
     }
 }
 
@@ -45,6 +44,11 @@ export function renderPosts(posts) {
                         <h2 class="post-title">${post.title}</h2>
                     </div>
                     <div class="down">
+                        <div class="post-img">
+                         <img id="post-img" 
+                                src="${post.image ? post.image : " "}" 
+                            >
+                        </div>
                         <div class="post-description">${post.description}</div>
                         <div class="post-tags">#${post.tags.map(tag => tag.name).join(" #")}</div>
                         <div class="post-time">Время чтения: ${post.readingTime} мин.</div>

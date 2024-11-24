@@ -15,7 +15,7 @@
     </div>
     <div class="wrapper-right" id="rightMenu">
       <div class="user-menu">
-        <span id="user-email" class="user-menu-email"></span>
+        <span id="user-email" class="user-menu-email">Вход</span>
         <span class="dropdown-arrow">▼</span>
           <div class="dropdown-content hidden" id="dropdownMenu">
               <a href="#" id="profile">Профиль</a>
@@ -102,11 +102,11 @@
       </div>
       <div class="container-down">
         <div class="pagination">
-          <a href="#">&laquo;</a>
-          <a href="#">1</a>
-          <a href="#" class="active">2</a>
-          <a href="#">3</a>
-          <a href="#">&raquo;</a>
+          <button class="pagination-prev">&laquo;</button>
+          <button class="pagination-button active" data-page="1">1</button>
+          <button class="pagination-button" data-page="2">2</button>
+          <button class="pagination-button" data-page="3">3</button>
+          <button class="pagination-next">&raquo;</button>
         </div>
         <div class="count-post">
           <label class="count-post-label" for="size">Число постов на странице</label>
@@ -136,5 +136,6 @@
   <script src="main.mjs" type="module"></script>
   <script src="tags.js" type="module"></script>
   <script src="post.mjs" type="module"></script>
+  <script src="pagination.mjs" type="module"></script>
 </body>
 </html>
