@@ -7,7 +7,9 @@ export async function fetchPosts(filters = {}, token = null) {
     params.append("size", filters.size || 5);
 
     if (filters.author) params.append("author", filters.author);
-    if (filters.tags && filters.tags.length > 0) params.append("tags", filters.tags.join(","));
+    if (filters.tags && filters.tags.length > 0) {
+        filters.tags.forEach(tag => params.append("tags", tag)); 
+    }
     if (filters.min) params.append("min", filters.min);
     if (filters.max) params.append("max", filters.max);
     if (filters.postSorting) params.append("sorting", filters.postSorting);
@@ -18,6 +20,7 @@ export async function fetchPosts(filters = {}, token = null) {
     }
     const url = `${baseUrl}?${params.toString()}`;
     try {
+        console.log('filter', filters.tags)
         const response = await fetch(url, { headers });
         if (!response.ok) throw new Error("Ошибка загрузки постов");
         return await response.json();
@@ -35,6 +38,9 @@ export function renderPosts(posts) {
         posts.forEach(post => {
             console.log("Post data:", post);
             const postElement = document.createElement("div");
+            const maxLengthPost = 500;
+            const isLong = post.description.length > maxLengthPost;
+            const shortPost = post.description.slice(0, maxLengthPost);
             postElement.classList.add("container-posts");
 
             postElement.innerHTML = `
@@ -49,7 +55,13 @@ export function renderPosts(posts) {
                                 src="${post.image ? post.image : " "}" 
                             >
                         </div>
-                        <div class="post-description">${post.description}</div>
+                        <div class="post-description">
+                        <span class="short-descroption">${isLong ? shortPost + "..." : post.description}</span>
+                        ${isLong ? `
+                            <button class="show-more-btn">Показать полностью</button>
+                            <span class="full-description" style="display: none;">${post.description}</span>
+                        ` : ""}
+                        </div>
                         <div class="post-tags">#${post.tags.map(tag => tag.name).join(" #")}</div>
                         <div class="post-time">Время чтения: ${post.readingTime} мин.</div>
                     </div>

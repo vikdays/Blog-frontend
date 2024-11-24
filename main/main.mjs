@@ -64,6 +64,7 @@ document.getElementById("do-btn").addEventListener("click", async (e) => {
     };
 
     try {
+        console.log("tag", filters.tags);
         const data = await fetchPosts(filters, token);
         if (data && data.posts) {
             renderPosts(data.posts);
