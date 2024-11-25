@@ -6,6 +6,7 @@ import { dislikePost } from './post.mjs';
 import { getURLParams } from './post.mjs';
 import { changePage } from './pagination.mjs';
 import { paginate} from './pagination.mjs';
+import { canUserLike} from './communities.mjs';
 
 const email = localStorage.getItem('userEmail');
 const token = localStorage.getItem('token');
@@ -61,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Select element for sorting not found');
     }
 });
+
 
 document.getElementById("do-btn").addEventListener("click", async (e) => {
     e.preventDefault();
@@ -130,6 +132,8 @@ document.addEventListener("click", async (event) => {
 
     const postId = button.dataset.id; 
     const img = button.querySelector("img");
+    const communityId = button.dataset.communityId;
+    console.log('communityId', communityId);
     const likesCountElement = button.parentElement.querySelector("#likes-count");
 
     if (!likesCountElement) return; 
@@ -141,6 +145,16 @@ document.addEventListener("click", async (event) => {
         window.location.href = "../authorization/authorization.html";
         return;
     }
+    console.log(communityId)
+
+    if (!communityId) {
+        const canLike = await canUserLike(communityId, token);
+        if (!canLike) {
+            alert("Вы должны быть подписчиком или администратором, чтобы оценить этот пост.");
+            return;
+        }
+    }
+    
 
     if (img.alt === "heart") {
         const success = await likePost(postId, token); 
@@ -175,3 +189,10 @@ document.addEventListener("click", async (e) => {
         }
     }
 });
+
+document.addEventListener("click", async (e) => {
+    if (e.target.classList.contains("post-title")) {
+        window.location.href = '../authorization/authorization.html'; 
+    }
+});
+

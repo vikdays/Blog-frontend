@@ -56,8 +56,8 @@ export function renderPosts(posts) {
             postElement.innerHTML = `
                 <div class="container-posts-body">
                     <div class="upper">
-                        <div class="pretitle">${post.author} - ${new Date(post.createTime).toLocaleString()} в сообществе "${post.communityName ? post.communityName : " "}"</div>
-                        <h2 class="post-title">${post.title}</h2>
+                        <div class="pretitle">${post.author} - ${new Date(post.createTime).toLocaleString()} в сообществе "${post.communityName ? post.communityName : "415"}"</div>
+                        <a> <h2 class="post-title">${post.title}</h2> </a>
                     </div>
                     <div class="down">
                         <div class="post-img">
@@ -83,7 +83,7 @@ export function renderPosts(posts) {
                     </div>
                     <div class="container-posts-likes">
                         <div id="likes-count">${post.likes}</div>
-                         <button class="image-button" data-id="${post.id}">
+                         <button class="image-button" data-id=${post.id} data-community-id=${post.communityId}>
                             <img id="like" class="like-img"
                                 src="${post.hasLike ? "../images/love.png" : "../images/heart.png"}" 
                                 alt="${post.hasLike ? "love" : "heart"}" 
