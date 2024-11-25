@@ -9,24 +9,31 @@ export function paginate(pagination, filters, token) {
 
     const MAX_VISIBLE_PAGES = 10; 
 
-    const createButton = (text, page, isActive = false, isDisabled = false) => {
-        const button = document.createElement('button');
-        button.textContent = text;
-        button.disabled = isDisabled;
-        if (isActive) button.className = 'active';
-        button.addEventListener('click', () => changePage(page, filters, token));
-        return button;
+    const createLink = (text, page, isActive = false, isDisabled = false) => {
+        const link = document.createElement('a');
+        link.textContent = text;
+        link.href = `?page=${page}&pageSize=${size}`;
+        link.className = isActive ? 'active' : "";
+        if (isDisabled){
+            link.classList.add('disabled');
+            link.style.pointerEvents = 'none';
+        } 
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+            if (!isDisabled) changePage(page, filters, token);
+        });
+        return link;
     };
 
     paginationContainer.appendChild(
-        createButton('«', current - 1, false, current === 1)
+        createLink('«', current - 1, false, current === 1)
     );
 
     const start = Math.max(1, current - Math.floor(MAX_VISIBLE_PAGES / 2));
     const end = Math.min(totalPages, start + MAX_VISIBLE_PAGES - 1);
 
     if (start > 1) {
-        paginationContainer.appendChild(createButton(1, 1));
+        paginationContainer.appendChild(createLink(1, 1));
         if (start > 2) {
             const ellipsis = document.createElement('span');
             ellipsis.textContent = '...';
@@ -35,7 +42,7 @@ export function paginate(pagination, filters, token) {
     }
 
     for (let i = start; i <= end; i++) {
-        paginationContainer.appendChild(createButton(i, i, i === current));
+        paginationContainer.appendChild(createLink(i, i, i === current));
     }
 
     if (end < totalPages) {
@@ -44,17 +51,23 @@ export function paginate(pagination, filters, token) {
             ellipsis.textContent = '...';
             paginationContainer.appendChild(ellipsis);
         }
-        paginationContainer.appendChild(createButton(totalPages, totalPages));
+        paginationContainer.appendChild(createLink(totalPages, totalPages));
     }
 
     paginationContainer.appendChild(
-        createButton('»', current + 1, false, current === totalPages)
+        createLink('»', current + 1, false, current === totalPages)
     );
 }
 
-async function changePage(page, filters, token) {
+export async function changePage(page, filters, token) {
     try {
         filters.page = page;
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('page', page);
+        urlParams.set('pageSize', filters.size);
+        history.pushState(null, '', `?${urlParams.toString()}`);
+
         const { posts, pagination } = await fetchPosts(filters, token);
         renderPosts(posts);
         paginate(pagination, filters, token);

@@ -3,12 +3,15 @@ import { renderPosts } from './post.mjs';
 import { fetchPosts } from './post.mjs';
 import { likePost } from './post.mjs';
 import { dislikePost } from './post.mjs';
+import { getURLParams } from './post.mjs';
+import { changePage } from './pagination.mjs';
 import { paginate} from './pagination.mjs';
 
 const email = localStorage.getItem('userEmail');
 const token = localStorage.getItem('token');
 const userEmail = document.getElementById('user-email');
 const dropdownMenu = document.getElementById('dropdownMenu');
+const dropdownArrow = document.getElementById('dropdownArrow');
 
 document.getElementById("logout").addEventListener("click", async (event) => {
     const response = await fetch('https://blog.kreosoft.space/api/account/logout', {
@@ -31,9 +34,18 @@ if (userEmail) {
     console.error('email not found in localStorage');
 
 }
-userEmail.addEventListener('click', () => {
-    dropdownMenu.classList.toggle('visible');
-});
+if (userEmail.textContent === email) {
+    userEmail.addEventListener('click', () => {
+        dropdownMenu.classList.toggle('visible');
+    });
+}
+else{
+    dropdownArrow.style.display = "none";
+    userEmail.addEventListener('click', () => {
+        window.location.href = '../authorization/authorization.html'; 
+    });
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const postSortingSelect = document.getElementById('postSorting');
@@ -52,45 +64,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.getElementById("do-btn").addEventListener("click", async (e) => {
     e.preventDefault();
+
+    const { page, size } = getURLParams();
+
     const filters = {
         author: document.getElementById("author").value,
         tags: Array.from(document.getElementById("tags").selectedOptions).map(option => option.value),
         min: document.getElementById("min").value,
         max: document.getElementById("max").value,
         onlyMyCommunities: document.getElementById("onlyMineCommunities").checked,
-        size: document.getElementById("size").value,
-        page: document.querySelector('button.active')?.value,
+        size: parseInt(document.getElementById("size").value, 10) || size,
+        page,
         postSorting: document.getElementById("postSorting").value,
     };
+    const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('page', page);
+        urlParams.set('pageSize', filters.size);
+        history.pushState(null, '', `?${urlParams.toString()}`);
 
     try {
         console.log("tag", filters.tags);
-        const data = await fetchPosts(filters, token);
-        if (data && data.posts) {
-            renderPosts(data.posts);
-            paginate(data.pagination, filters, token);
-        } else {
-            console.error("Нет данных для отображения.");
-        }
+        const { posts, pagination } = await fetchPosts(filters, token);
+        renderPosts(posts); // Отображаем посты
+        paginate(pagination, filters, token);
     } catch (error) {
         console.error("Ошибка при загрузке постов:", error.message);
     }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const sizeElement = document.getElementById('size');
-    const pageSize = sizeElement ? parseInt(sizeElement.value, 10) || 5 : 5;
+    const { page, size } = {page: 1, size: 5}
+
+    const filters = {
+        size,
+        page,
+    };
 
     const getCurrentPage = () => {
-        const activeButton = document.querySelector('button.active');
+        const activeButton = document.querySelector('a.active');
         return activeButton ? parseInt(activeButton.value, 10) || 1 : 1;
     };
     const loadPage = async () => {
         const page = getCurrentPage();
         try {
-            const { posts, pagination } = await fetchPosts({ size: pageSize, page }, token);
+            changePage(page, filters, token);
+            const { posts, pagination } = await fetchPosts(filters, token);
             renderPosts(posts);
-            paginate(pagination, { size: pageSize, page }, token);
+            paginate(pagination, filters, token);
         } catch (error) {
             console.error("Ошибка при загрузке постов:", error.message);
         }
@@ -98,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPage();
 
     document.addEventListener('click', (event) => {
-        if (event.target.tagName === 'BUTTON' && event.target.classList.contains('active')) {
+        if (event.target.tagName === 'a' && event.target.classList.contains('active')) {
             loadPage(); 
         }
     });
@@ -135,6 +155,23 @@ document.addEventListener("click", async (event) => {
             img.src = "../images/heart.png";
             img.alt = "heart";
             likesCountElement.textContent = likesCount - 1;
+        }
+    }
+});
+
+document.addEventListener("click", async (e) => {
+    if (e.target.classList.contains("show-more-btn")) {
+        e.preventDefault();
+
+        const button = e.target;
+        const postDescription = button.parentElement;
+        const shortDescription = postDescription.querySelector('.short-description');
+        const fullDescription = postDescription.querySelector('.full-description'); 
+
+        if (shortDescription && fullDescription) {
+            shortDescription.style.display = "none";
+            fullDescription.style.display = "block";
+            button.remove();
         }
     }
 });

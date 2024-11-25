@@ -19,14 +19,24 @@ export async function fetchPosts(filters = {}, token = null) {
         headers['Authorization'] = `Bearer ${token}`;
     }
     const url = `${baseUrl}?${params.toString()}`;
+    
     try {
         console.log('filter', filters.tags)
         const response = await fetch(url, { headers });
         if (!response.ok) throw new Error("Ошибка загрузки постов");
+        
         return await response.json();
     } catch (error) {
         console.error("Ошибка при запросе постов:", error.message);
         return { posts: [], pagination: { size: 0, count: 0, current: 1 } };
+    }
+}
+
+export function getURLParams() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+        page: parseInt(params.get('page'), 10) || 1,
+        size:  parseInt(params.get('pageSize'), 10) || 1,
     }
 }
 
@@ -56,7 +66,7 @@ export function renderPosts(posts) {
                             >
                         </div>
                         <div class="post-description">
-                        <span class="short-descroption">${isLong ? shortPost + "..." : post.description}</span>
+                        <span class="short-description">${isLong ? shortPost + "..." : post.description}</span>
                         ${isLong ? `
                             <button class="show-more-btn">Показать полностью</button>
                             <span class="full-description" style="display: none;">${post.description}</span>
