@@ -56,7 +56,7 @@ export function renderPosts(posts) {
             postElement.innerHTML = `
                 <div class="container-posts-body">
                     <div class="upper">
-                        <div class="pretitle">${post.author} - ${new Date(post.createTime).toLocaleString()} в сообществе "${post.communityName}"</div>
+                        <div class="pretitle">${post.author} - ${new Date(post.createTime).toLocaleString()} в сообществе "${post.communityName ? post.communityName : " "}"</div>
                         <h2 class="post-title">${post.title}</h2>
                     </div>
                     <div class="down">
