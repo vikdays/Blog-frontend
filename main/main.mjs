@@ -191,8 +191,13 @@ document.addEventListener("click", async (e) => {
 });
 
 document.addEventListener("click", async (e) => {
-    if (e.target.classList.contains("post-title")) {
-        window.location.href = '../authorization/authorization.html'; 
-    }
+    localStorage.removeItem('postId');
+    const title = e.target.closest(".post-title");
+    if (!title) return;
+    const postId = title.dataset.id; 
+    console.log("postId", postId)
+    localStorage.setItem('postId', postId);
+        
+    window.location.href = '../postPage/postPage.html'; 
 });
 

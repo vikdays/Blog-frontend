@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+  <title>Post Page</title>
+</head>
+<body>
+  <header class="header">
+    <span class="logo">Блог №415</span>
+    <div class="wrapper-left">
+      <a href="../main/main.html">Главная</a>
+      <a href="#">Авторы</a>
+      <a href="#">Группы</a>
+    </div>
+    <div class="wrapper-right" id="rightMenu">
+      <div class="user-menu">
+        <span id="user-email" class="user-menu-email">Вход</span>
+        <span class="dropdown-arrow" id="dropdownArrow">▼</span>
+          <div class="dropdown-content hidden" id="dropdownMenu">
+              <a href="#" id="profile">Профиль</a>
+              <a href="#" id="logout">Выход</a>
+          </div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="container">
+        <div class="container-posts">
+            <div class="container-posts-body">
+              <div class="upper">
+                <div class="pretitle">${post.author} - ${post.createTime} в сообществе "${post.communityName}"</div>
+                <h2 class="post-title">${post.title}</h2>
+              </div>
+              <div class="down" >
+                <p class="post-description">${post.description}</p>
+                <p class="post-tags"> ${post.tags.map(tag => tag.name).join(" ")}</p>
+                <p class="post-time">Время чтения: ${post.readingTime} мин.</p>
+                <div class="post-geo">
+                    <img src="../images/geo.png" alt="geo" id="geo">
+                    <div id="geo">${post.addressId}</div>
+                </div>
+              </div>
+            </div>
+            <div class="container-posts-footer">
+                <div class="container-posts-comment">
+                    <div id="comments-count">${post.commentsCount}</div>
+                    <img src="../images/comment.png" alt="comment" id="comment">
+                </div>
+                <div class="container-posts-likes">
+                    <div id="likes-count">${post.likes}</div>
+                     <button class="image-button" data-id=${post.id} data-community-id=${post.communityId}>
+                        <img id="like" class="like-img"
+                        >
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="container-comments">
+            <h2 class="container-comments-title">Комментарии</h2>
+            <div class="container-comments-box">
+                <div class="pretitle">${comment.author}</div>
+                <div class="content">${comment.content}</div>
+                <div class="pretitle">${new Date(post.createTime).toLocaleString()}
+                    <button class="answer">Ответить</button>
+                </div>
+                <button class="show-answers">Раскрыть ответы</button>
+            </div>
+        </div>
+        <div class="container-addComment">
+            <div class="pretitle">Оставьте комментарий</div>
+            <textarea></textarea>
+            <button class="send">Отправить</button>
+        </div>
+    </div>
+      
+    
+  </main>
+  <footer>
+    <p>© 2022 - Блог №415</p>
+  </footer>
+  <script src="postPage.mjs" type="module"></script>
+</body>
+</html>

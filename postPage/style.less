@@ -1,0 +1,286 @@
+@footer-background: rgb(248,249,250);
+@label-background: rgb(247,247,247);
+@border-color: rgb(232,232,232);
+@link-color: #000;
+@blue: rgb(13,110,253);
+@grey: rgb(108,117,125);
+* {
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: Trebuchet MS, sans-serif;
+}
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header{
+    display: flex;
+    min-height: 7%;
+    padding: 1em 2em;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 13px 10px -15px grey;  
+}
+.logo {
+    padding-right: 2em;
+    //font-size: 18px;
+}
+.wrapper {
+    &-left{
+        display: flex;
+        gap: 15px;    
+    }
+    &-right {
+        margin-left: auto;
+    }
+}
+a {
+    //font-size: 14px;
+    text-decoration: none;
+    color: @link-color;
+    &:hover{
+        color: @blue;
+    }
+}
+
+footer {
+    background-color: @footer-background;
+    align-items: center;
+    display: flex;
+    border-top: medium solid @border-color;
+    padding-left: 5em;
+    //font-size: 0.8em;
+    color: darken(@border-color, 50%);
+    min-height: 7%;
+    //font-size: 15px;
+}
+main {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: start;
+    justify-content:center;
+}
+
+.container{
+    //display: flex;
+    min-width: 65%;
+    max-width: 70%;
+    
+    &-posts{
+        margin-top: 10px;
+        &-footer{
+            background-color: @label-background;
+            display: flex;
+            justify-content: space-between;
+            border: thin solid @border-color;
+            padding: 8px;
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+            margin-bottom: 10px;
+        }
+          
+        &-comment, &-likes{
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        &-body {
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            padding: 15px;
+            border: thin solid @border-color;
+            .upper{
+                
+                padding-bottom: 10px;
+                border-bottom: 2px solid @border-color;
+                width: 100%;
+
+                .pretitle{
+                    //font-size: 13px;
+                }
+                .post-title{
+                    margin-top: 10px;
+                    cursor: pointer;
+                }
+            }
+            .down{
+                padding-top: 15px;
+                .post-description{
+                    padding-bottom: 15px;
+                    //font-size: 13px;
+                }
+                .post-tags{
+                    //font-size: 13px;
+                    color: @grey;
+                    padding-bottom: 5px;
+                }
+                .post-time{
+                    //font-size: 14px;
+                }
+                .post-img{
+                    display: flex;
+                    justify-content: center;
+                    margin-bottom: 5px;
+                }
+                .post-geo{
+                    display: flex;
+                    margin-top: 5px;
+                    gap: 5px;
+                }
+                
+            }
+            
+        }
+
+    }
+    &-down{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+        margin-top: 10px;
+    }
+    &-comments {
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        padding: 15px;
+        border: thin solid @border-color;
+        margin-bottom: 10px;
+
+        &-box{
+            padding-top: 10px;
+            margin-bottom: 30px;
+
+            .pretitle{
+                margin-bottom: 10px;
+                font-size: 12px;
+            }
+            .content{
+                margin-bottom: 10px;
+
+                .modified-date{
+                    font-size: 10px;
+                    color: @grey;
+                }
+            }
+            button{
+                border: none;
+                background-color: white;
+                cursor: pointer;
+                color: @blue;
+                //margin-top: 3px;
+                .answer{
+                    display: flex;
+                }
+            }
+        }
+    }
+    &-addComment{
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        padding: 15px;
+        border: thin solid @border-color;
+        margin-bottom: 50px;
+        padding-bottom: 50px;
+        textarea{
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            border: thin solid @border-color;
+            width: 100%;
+            font-size: 15px;
+            height: 100px;
+            display: block;
+            margin-top: 5px;
+        }
+        .send{
+            border: thin solid @border-color;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            padding: 0.6em;
+            background-color: @blue;
+            color: white;
+            border-radius: 4px;
+            float: right;
+            &:hover{
+                background-color: darken(@blue, 5%);
+            }
+            
+        }
+    }
+}
+
+.image-button{
+    border: none;
+    margin-top: 5px;
+    background-color: @label-background;
+
+}
+#post-img{
+    max-width: 500px;
+    max-height: 500px;
+}
+
+#comment, #like{
+    height: 15px;
+    width: 15px;
+}
+#geo{
+    height: 18px;
+    width: 20px;
+    margin-top: 3px;
+    //position: absolute;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: thin solid darken(@border-color, 10%);
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-right: 150px;
+    min-width: 130px;
+    z-index: 10;
+
+    a{
+        color: black; 
+        padding: 10px 20px;
+        text-decoration: none;
+        display: block;
+        &:hover{
+            background-color: @footer-background;
+        }
+    }
+}
+.dropdown-content.visible {
+    display: block;
+}
+
+
+.user-menu {
+    &-email {
+        color: black; 
+        cursor: pointer; 
+        display: inline-block; 
+        
+        margin-right: 5px; 
+        &:hover .dropdown-content {
+            display: block; 
+            position: relative;
+        }
+    }
+}
+
+.dropdown-arrow {
+    color: black; 
+    cursor: pointer; 
+    vertical-align: middle; 
+}
+#rightMenu {
+    position: relative;
+}

@@ -30,13 +30,21 @@ gulp.task('less-main', function() {
         .pipe(gulp.dest('./main'));
 })
 
+gulp.task('less-postPage', function() {
+    return gulp.src('./postPage/style.less')
+        .pipe(less())
+        .pipe(cleanCss())
+        .pipe(gulp.dest('./postPage'));
+})
+
 gulp.task('watch', function() {
     gulp.watch('./authorization/style.less', gulp.series('less-authorization'));
     gulp.watch('./registration/style.less', gulp.series('less-registration'));
     gulp.watch('./profile/style.less', gulp.series('less-profile'));
     gulp.watch('./main/style.less', gulp.series('less-main'));
+    gulp.watch('./postPage/style.less', gulp.series('less-postPage'));
 })
 
 
-gulp.task('less', gulp.series('less-authorization', 'less-registration', 'less-profile', 'less-main'));
+gulp.task('less', gulp.series('less-authorization', 'less-registration', 'less-profile', 'less-main', 'less-postPage'));
 gulp.task('default', gulp.series('less', 'watch'));
