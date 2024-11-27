@@ -19,7 +19,7 @@ export async function renderCommentsChain(commentId, container = null) {
         commentElement.classList.add("nested-comment");
 
         commentElement.innerHTML = `
-            <div class="pretitle">${comment.author ? comment.author : '[Комментарий удален]'}
+            <div class="pretitle">${comment.content ? comment.author : '[Комментарий удален]'}
             ${comment.authorId === userId ? `
                 <button class="edit-comment-btn">
                 <img id="edit" class="edit" src="../images/pencil.png">

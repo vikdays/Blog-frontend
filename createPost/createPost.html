@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+  <title>Profile</title>
+</head>
+<body>
+  <header class="header">
+    <span class="logo">Блог №415</span>
+    <div class="wrapper-left">
+      <a href="../main/main.html">Главная</a>
+      <a href="#">Авторы</a>
+      <a href="#">Группы</a>
+    </div>
+    <div class="wrapper-right" id="rightMenu">
+      <div class="user-menu">
+        <span id="user-email" class="user-menu-email"></span>
+        <span class="dropdown-arrow" id="dropdownArrow">▼</span>
+          <div class="dropdown-content hidden" id="dropdownMenu">
+              <a href="#" id="profile">Профиль</a>
+              <a href="#" id="logout">Выход</a>
+          </div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="container">
+        <h2 class="title">Написать новый пост</h2>
+        <form class="container-post">
+            <div class="container-post-first">
+                <div class="container-field-left" >
+                    <label for="title" class="label">Название</label>
+                    <input class="input" type="text" name="title" id="author" required>
+                </div>
+                <div class="container-field-right" >
+                    <label for="readingTime">Время чтения</label>
+                    <input class="input" type="number" name="readingTime" id="readingTime">
+                </div>
+            </div>
+            <div class="container-post-second">
+                <div class="container-field" >
+                    <label for="community">Группа</label>
+                    <select class="community" name="community" id="community"></select>
+                </div>
+                <div class="container-field" >
+                    <label for="tags" class="label">Тэги</label>
+                    <select class="tags" name="tags" id="tags" multiple class="select"></select>
+                </div>
+            </div>
+            <div class="container-post-third">
+                <div class="container-field-full" >
+                    <label for="image" class="label">Ссылка на картинку</label>
+                    <input class="input" type="text" name="image" id="image">
+                </div>
+            </div>
+            <div class="container-post-forth">
+                <div class="container-field-full" >
+                    <label for="description" class="label">Текст</label>
+                    <textarea class="description" type="text" name="description" id="description"></textarea>
+                </div>
+            </div>
+        </form>
+        <h3 class="address">Адрес</h3>
+            <form>
+                <div class="container-post-second">
+                    <div class="container-field" >
+                        <label for="community">Группа</label>
+                        <select class="community" name="community" id="community"></select>
+                    </div>
+
+                </div>
+            </form>
+        </h3>
+      </div>
+    </div>
+    
+  </main>
+  <footer>
+    <p>© 2022 - Блог №415</p>
+  </footer>
+  <script src="createPost.mjs" type="module"></script>
+  <script src="../main/tags.js" type="module"></script>
+</body>
+</html>

@@ -3,7 +3,6 @@ import { postComment } from './comments.mjs';
 export function answerButtonClick(commentElement, parentId) {
     const existingAnswerForm = commentElement.querySelector(".answer-form");
 
-    // Если форма уже существует, удаляем её
     if (existingAnswerForm) {
         existingAnswerForm.remove();
         return;

@@ -18,7 +18,7 @@ export function editButtonClick(commentElement, commentId) {
         const token = localStorage.getItem("token");
         try {
             await editComment(commentId, token, content);
-            editForm.innerHTML = ''; // Удалить форму редактирования
+            editForm.innerHTML = ''; 
             window.location.reload();
         } catch (error) {
             console.error("Ошибка при отправке комментария:", error.message);

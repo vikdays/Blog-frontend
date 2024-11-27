@@ -22,7 +22,7 @@ export async function renderComments(post) {
         commentElement.classList.add("container-comments-box");
     
         commentElement.innerHTML = `
-            <div class="pretitle">${comment.author ? comment.author : '[Комментарий удален]'}
+            <div class="pretitle">${comment.content ? comment.author : '[Комментарий удален]'}
             ${comment.authorId === userId ? `
                 <button class="edit-comment-btn">
                 <img id="edit" class="edit" src="../images/pencil.png">
