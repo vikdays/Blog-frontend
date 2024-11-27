@@ -62,15 +62,15 @@
                 <div class="pretitle">${comment.author}</div>
                 <div class="content">${comment.content}</div>
                 <div class="pretitle">${new Date(post.createTime).toLocaleString()}
-                    <button class="answer">Ответить</button>
+                    <button class="answer" id="aswer-btn">Ответить</button>
                 </div>
                 <button class="show-answers">Раскрыть ответы</button>
             </div>
         </div>
         <div class="container-addComment">
             <div class="pretitle">Оставьте комментарий</div>
-            <textarea></textarea>
-            <button class="send">Отправить</button>
+            <textarea id="textarea"></textarea>
+            <button class="send" id="send-btn">Отправить</button>
         </div>
     </div>
       

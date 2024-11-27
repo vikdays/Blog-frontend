@@ -4,7 +4,7 @@ const email = localStorage.getItem('userEmail');
 const userEmail = document.getElementById('user-email');
 import { fetchAddress, getAddressId } from './address.mjs';
 import { likePost, dislikePost } from '../main/post.mjs';
-import { renderComments } from './comments.mjs';
+import { renderComments, postComment } from './comments.mjs';
 
 export async function fetchPost(postId, token = null) {
     console.log(postId, token);
@@ -177,3 +177,21 @@ else{
         window.location.href = '../authorization/authorization.html'; 
     });
 }
+
+document.getElementById("send-btn").addEventListener("click", async (e) => {
+    e.preventDefault();
+    const parentId = null;
+    const content = document.getElementById('textarea').value;
+    const data = {content, parentId}
+    console.log(data);
+    try {
+        await postComment(data, postId, token);
+        window.location.href = './postPage.html';
+        
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
+});
+
+
+
