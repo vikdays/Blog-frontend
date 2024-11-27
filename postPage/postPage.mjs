@@ -5,6 +5,7 @@ const userEmail = document.getElementById('user-email');
 import { fetchAddress, getAddressId } from './address.mjs';
 import { likePost, dislikePost } from '../main/post.mjs';
 import { renderComments, postComment } from './comments.mjs';
+import { renderCommentsChain } from './commentsChain.mjs';
 
 export async function fetchPost(postId, token = null) {
     console.log(postId, token);
@@ -43,7 +44,7 @@ export async function renderPost(post) {
             <div class="container-posts-body">
                 <div class="upper">
                     <div class="pretitle">${post.author} - ${new Date(post.createTime).toLocaleString()} в сообществе "${post.communityName ? post.communityName : "415"}"</div>
-                    <a> <h2 class="post-title" data-id=${post.id}>${post.title}</h2> </a>
+                    <h2 class="post-title" data-id=${post.id}>${post.title}</h2> 
                 </div>
                 <div class="down">
                     <div class="post-img">
@@ -63,9 +64,9 @@ export async function renderPost(post) {
                 </div>
             </div>
             <div class="container-posts-footer">
-                <div class="container-posts-comment">
+                <div class="container-posts-comment" id="comments-section">
                     <div id="comments-count">${post.commentsCount}</div>
-                    <img src="../images/comment.png" alt="comment" id="comment">
+                    <img src="../images/comment.png" alt="comment" id="comment" data-id=${post.id}>
                 </div>
                 <div class="container-posts-likes">
                     <div id="likes-count">${post.likes}</div>
@@ -92,7 +93,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         await renderPost(post);
         if (post.comments) {
             await renderComments(post);
+            
         }
+        if (window.location.hash === "#comments-section") {
+            const commentsSection = document.getElementById('comments-section');
+            if (commentsSection) {
+                commentsSection.scrollIntoView({behavior: "smooth"});
+            }
+        }
+        
     } catch (error) {
         console.error("Ошибка при загрузке постов:", error.message);
     }
@@ -186,12 +195,35 @@ document.getElementById("send-btn").addEventListener("click", async (e) => {
     console.log(data);
     try {
         await postComment(data, postId, token);
-        window.location.href = './postPage.html';
+        window.location.reload();
         
     } catch (error) {
         console.error('Error:', error.message);
     }
 });
 
+document.addEventListener("click", async (event) => {
+    const button = event.target.closest(".show-more-button");
+    if (!button) return;
+    const commentId = button.dataset.id;
+    const commentElement = button.closest(".nested-comment") || button.closest(".container-comments-box");
 
+    if (!commentId || !commentElement) {
+        console.error("Не удалось найти ID комментария или его элемент.");
+        return;
+    }
+
+    let nestedContainer = commentElement.querySelector(".nested-comments");
+
+    if (nestedContainer) {
+        nestedContainer.classList.toggle("hidden");
+    } else {
+        try {
+            nestedContainer = await renderCommentsChain(commentId);
+            commentElement.appendChild(nestedContainer);
+        } catch (error) {
+            console.error(`Ошибка при рендеринге вложенных комментариев для ID ${commentId}:`, error.message);
+        }
+    }
+});
 

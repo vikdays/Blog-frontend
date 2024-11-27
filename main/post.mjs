@@ -79,7 +79,7 @@ export function renderPosts(posts) {
                 <div class="container-posts-footer">
                     <div class="container-posts-comment">
                         <div id="comments-count">${post.commentsCount}</div>
-                        <img src="../images/comment.png" alt="comment" id="comment">
+                        <img src="../images/comment.png" alt="comment" id="comment" class="comment" data-id=${post.id}>
                     </div>
                     <div class="container-posts-likes">
                         <div id="likes-count">${post.likes}</div>

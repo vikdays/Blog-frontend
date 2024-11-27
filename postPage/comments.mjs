@@ -1,3 +1,4 @@
+import { answerButtonClick } from './anwerComment.mjs';
 export async function renderComments(post) {
     const commentsContainer = document.querySelector(".container-comments");
     
@@ -18,18 +19,29 @@ export async function renderComments(post) {
         commentElement.classList.add("container-comments-box");
     
         commentElement.innerHTML = `
-            <div class="pretitle">${comment.author}</div>
-            <div class="content">${comment.content}
+            <div class="pretitle">${comment.author ? comment.author : '[Комментарий удален]'}</div>
+            <div class="content">${comment.content ? comment.content : '[Комментарий удален]'}
                 <span class="modified-date">${comment.modifiedDate ? "(изменен)" : ""}</span>
             </div>
             <div class="pretitle">${new Date(comment.createTime).toLocaleString()}
-                <button class="answer" data-id=${comment.id}>Ответить</button>
             </div>
         `;
+
+        if (!comment.deleteDate) {
+            const replyButton = document.createElement("button");
+            replyButton.textContent = "Ответить";
+            replyButton.classList.add("answer");
+            replyButton.setAttribute("data-id", comment.id);
+            commentElement.querySelector(".pretitle:last-child").appendChild(replyButton);
+
+            replyButton.addEventListener("click", () => answerButtonClick(commentElement, comment.id));
+        }
+
         if (comment.subComments > 0) {
             const expandButton = document.createElement("button");
             expandButton.textContent = "Раскрыть ответы";
             expandButton.classList.add("show-more-button");
+            expandButton.setAttribute("data-id", comment.id);
             commentElement.appendChild(expandButton);
         }
         commentsBox.appendChild(commentElement);

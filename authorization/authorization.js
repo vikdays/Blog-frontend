@@ -69,6 +69,7 @@ async function handleLoginFormSubmit(event) {
     const password = formData.get('password');
 
     try {
+        localStorage.clear();
         const response = await login({email, password});
         if (response.ok) {
             const data = await response.json();

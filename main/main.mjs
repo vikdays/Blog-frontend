@@ -147,7 +147,8 @@ document.addEventListener("click", async (event) => {
     }
     console.log(communityId)
 
-    if (!communityId) {
+
+    if (!communityId) { //!
         const canLike = await canUserLike(communityId, token);
         if (!canLike) {
             alert("Вы должны быть подписчиком или администратором, чтобы оценить этот пост.");
@@ -163,12 +164,20 @@ document.addEventListener("click", async (event) => {
             img.alt = "love";
             likesCountElement.textContent = likesCount + 1;
         }
+        else{
+            alert('Необходимо авторизоваться');
+            window.location.href = "../authorization/authorization.html";
+        }
     } else if (img.alt === "love") {
         const success = await dislikePost(postId, token);
         if (success) {
             img.src = "../images/heart.png";
             img.alt = "heart";
             likesCountElement.textContent = likesCount - 1;
+        }
+        else{
+            alert('Необходимо авторизоваться');
+            window.location.href = "../authorization/authorization.html";
         }
     }
 });
@@ -193,11 +202,21 @@ document.addEventListener("click", async (e) => {
 document.addEventListener("click", async (e) => {
     localStorage.removeItem('postId');
     const title = e.target.closest(".post-title");
-    if (!title) return;
-    const postId = title.dataset.id; 
-    console.log("postId", postId)
-    localStorage.setItem('postId', postId);
-        
-    window.location.href = '../postPage/postPage.html'; 
+    if (title) {
+        const postId = title.dataset.id; 
+        localStorage.setItem('postId', postId);
+        window.location.href = '../postPage/postPage.html'; 
+        return;
+    }
+    
+    const commentIcon = e.target.closest(".comment");
+    if (commentIcon) {
+        const postId = commentIcon.dataset.id;
+        console.log("postId (комментарии)", postId);
+        localStorage.setItem('postId', postId);
+
+        window.location.href = '../postPage/postPage.html#comments-section';
+        return;
+    }
 });
 

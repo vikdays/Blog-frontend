@@ -98,12 +98,8 @@ main {
                 border-bottom: 2px solid @border-color;
                 width: 100%;
 
-                .pretitle{
-                    //font-size: 13px;
-                }
                 .post-title{
                     margin-top: 10px;
-                    cursor: pointer;
                 }
             }
             .down{
@@ -179,6 +175,33 @@ main {
                     display: flex;
                 }
             }
+            
+            .answer-form{
+                display: flex;
+                align-items: center;
+                gap: 30px;
+
+                .answer-input{
+                    width: 80%;
+                    border: thin solid @border-color;
+                    padding: 0.6em;
+                    border-radius: 4px;
+                }
+                .send{
+                    border: thin solid @border-color;
+                    cursor: pointer;
+                    display: inline-block;
+                    padding: 0.6em;
+                    background-color: @blue;
+                    color: white;
+                    border-radius: 4px;
+                    float: right;
+                    &:hover{
+                        background-color: darken(@blue, 5%);
+                    }
+                }
+            
+            }
         }
     }
     &-addComment{
@@ -232,6 +255,7 @@ main {
 #comment, #like{
     height: 15px;
     width: 15px;
+    cursor: pointer;
 }
 #geo{
     height: 18px;
@@ -287,4 +311,20 @@ main {
 }
 #rightMenu {
     position: relative;
+}
+
+.nested-comments {
+    margin-left: 20px;
+    border-left: 2px solid lighten(@blue, 25%);
+    padding-left: 10px;
+}
+
+.nested-comments.hidden {
+    display: none;
+}
+
+.nested-comment {
+    margin-bottom: 10px;
+    padding: 5px;
+    border-bottom: 1px solid @border-color;
 }
