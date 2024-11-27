@@ -2,7 +2,7 @@ const postId = localStorage.getItem('postId');
 const token = localStorage.getItem('token');
 const email = localStorage.getItem('userEmail');
 const userEmail = document.getElementById('user-email');
-import { fetchAddress, getAddressId } from './address.mjs';
+import { fetchAddress} from './address.mjs';
 import { likePost, dislikePost } from '../main/post.mjs';
 import { renderComments, postComment } from './comments.mjs';
 import { renderCommentsChain } from './commentsChain.mjs';
@@ -58,8 +58,8 @@ export async function renderPost(post) {
                     <div class="post-tags">#${post.tags.map(tag => tag.name).join(" #")}</div>
                     <div class="post-time">Время чтения: ${post.readingTime} мин.</div>
                     <div class="post-geo">
-                        <img src="../images/geo.png" alt="geo" id="geo">
-                        <div >${formattedAddress ? formattedAddress : ""}</div>
+                        ${formattedAddress ? `<img src="../images/geo.png" alt="geo" id="geo">` : ""}
+                        <div>${formattedAddress ? formattedAddress : ""}</div>
                     </div>
                 </div>
             </div>

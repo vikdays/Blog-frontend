@@ -52,6 +52,7 @@ if (token) {
 
         userEmail.textContent = data.email;
         localStorage.setItem('userEmail', data.email);
+        localStorage.setItem('userId', data.id);
     });
 } else {
     showError('Сначала авторизуйтесь')

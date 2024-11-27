@@ -4,6 +4,7 @@
 @link-color: #000;
 @blue: rgb(13,110,253);
 @grey: rgb(108,117,125);
+@yellow: rgb(255,193,7);
 * {
     margin: 0;
     padding:0;
@@ -156,6 +157,8 @@ main {
             .pretitle{
                 margin-bottom: 10px;
                 font-size: 12px;
+                display: flex;
+                gap: 10px;
             }
             .content{
                 margin-bottom: 10px;
@@ -176,16 +179,19 @@ main {
                 }
             }
             
-            .answer-form{
+            
+            .answer-form, .edit-form{
                 display: flex;
                 align-items: center;
                 gap: 30px;
+                align-items: center;
 
                 .answer-input{
                     width: 80%;
                     border: thin solid @border-color;
                     padding: 0.6em;
                     border-radius: 4px;
+                    //margin-bottom: 10px;
                 }
                 .send{
                     border: thin solid @border-color;
@@ -200,8 +206,22 @@ main {
                         background-color: darken(@blue, 5%);
                     }
                 }
+                .edit{
+                    border: thin solid @border-color;
+                    cursor: pointer;
+                    display: inline-block;
+                    padding: 0.6em;
+                    color: black;
+                    background-color: @yellow;
+                    border-radius: 4px;
+                    float: right;
+                    &:hover{
+                        background-color: darken(@yellow, 5%);
+                    }
+                }
             
             }
+            
         }
     }
     &-addComment{
@@ -252,7 +272,7 @@ main {
     max-height: 500px;
 }
 
-#comment, #like{
+#comment, #like, #edit, #delete{
     height: 15px;
     width: 15px;
     cursor: pointer;

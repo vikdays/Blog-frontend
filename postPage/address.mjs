@@ -1,9 +1,4 @@
 import { fetchPost } from './postPage.mjs';
-export async function getAddressId(postId, token = null) {
-    const response =  await fetchPost(postId, token);
-    console.log('address', response.addressId);
-    return response.addressId;
-}
 
 export async function fetchAddress(addressId) {
     const baseUrl = "https://blog.kreosoft.space/api/address/chain";

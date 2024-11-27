@@ -1,4 +1,5 @@
 import { postComment } from './comments.mjs';
+
 export function answerButtonClick(commentElement, parentId) {
     const existingAnswerForm = commentElement.querySelector(".answer-form");
 
@@ -14,7 +15,7 @@ export function answerButtonClick(commentElement, parentId) {
         <input type='text' class="answer-input" placeholder="Оставьте комментарий..."></input>
         <button class = "send">Отправить</button>
     `;
-
+    
     commentElement.appendChild(answerForm);
 
     const sendButton = answerForm.querySelector(".send");
@@ -33,6 +34,7 @@ export function answerButtonClick(commentElement, parentId) {
 
         try {
             await postComment(data, postId, token);
+            
             window.location.reload();
         } catch (error) {
             console.error("Ошибка при отправке комментария:", error.message);
