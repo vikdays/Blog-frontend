@@ -26,11 +26,11 @@
   </header>
   <main>
     <div class="container">
-        <h2 class="title">Написать новый пост</h2>
+        <h1 class="title">Написать новый пост</h1>
         <form class="container-post">
             <div class="container-post-first">
                 <div class="container-field-left" >
-                    <label for="title" class="label">Название</label>
+                    <label for="author" class="label">Название</label>
                     <input class="input" type="text" name="title" id="author" required>
                 </div>
                 <div class="container-field-right" >
@@ -61,17 +61,14 @@
                 </div>
             </div>
         </form>
-        <h3 class="address">Адрес</h3>
-            <form>
-                <div class="container-post-second">
-                    <div class="container-field" >
-                        <label for="community">Группа</label>
-                        <select class="community" name="community" id="community"></select>
-                    </div>
-
-                </div>
+        <h2 class="address">Адрес</h2>
+            <form class="container-address">
+                  <div class="container-field" >
+                      <label for="subject">Субъект РФ</label>
+                      <select class="select" name="subject" id="subject"></select>
+                  </div>
             </form>
-        </h3>
+        <button class="create-btn">Создать пост</button>
       </div>
     </div>
     

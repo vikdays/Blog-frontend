@@ -11,14 +11,14 @@ export async function fetchUserCommunities(token) {
         if (!response.ok) {
             throw new Error('Failed to fetch user communities');
         }
-        return await response.json;
+        return await response.json();
     }
     catch (error) {
         console.error(error.message);
     }
 }
 
-async function fetchCommunities() {
+export async function fetchCommunities() {
     try {
         const response = await fetch('https://blog.kreosoft.space/api/community', {
             method: 'GET',
@@ -29,7 +29,7 @@ async function fetchCommunities() {
         if (!response.ok) {
             throw new Error('Failed to fetch communities');
         }
-        return await response.json;
+        return await response.json();
     }
     catch (error) {
         console.error(error.message);
