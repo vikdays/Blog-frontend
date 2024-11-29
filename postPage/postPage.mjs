@@ -53,7 +53,7 @@ export async function renderPost(post) {
                         >
                     </div>
                     <div class="post-description">
-                        <span class="short-description">${post.description}</span>
+                        <div class="short-description">${post.description}</div>
                     </div>
                     <div class="post-tags">#${post.tags.map(tag => tag.name).join(" #")}</div>
                     <div class="post-time">Время чтения: ${post.readingTime} мин.</div>
