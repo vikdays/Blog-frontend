@@ -29,6 +29,15 @@ document.getElementById("profile").addEventListener("click", async (event) => {
     window.location.href = '../profile/profile.html'; 
 })
 
+document.getElementById("post-btn").addEventListener("click", async (e) => {
+    if (token) {
+        window.location.href = '../createPost/createPost.html'; 
+    }
+    else{
+        alert('Чтобы написать пост необходимо авторизоваться');
+    }
+});
+
 if (userEmail) {
     userEmail.textContent = email || 'Вход';
 } else {

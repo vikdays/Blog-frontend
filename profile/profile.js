@@ -140,6 +140,8 @@ async function handleUpdateProfile(event) {
             }   
         } 
         else {
+            response = await response.json();
+            localStorage.setItem('userEmail', response.email);
             showSuccess("Профиль успешно обновлен!" );
         }
     } 

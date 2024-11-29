@@ -139,22 +139,42 @@ main {
     
 
 }
-.address-container{
 
+.container-field {
+    margin-right: auto;
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    margin-top: 10px;
     width: 100%;
-    //gap: 25px;
-    .container-field {
-        display: flex;
-        gap: 5px;
-        flex-direction: column;
-        margin-top: 10px;
-        width: 100%;
-        .select2{
-            flex: 1; /* Растягиваем Select2 по ширине родителя */
-        }
-        
-    }
-}
+  }
+  
+  .select2-container {
+    width: 100% !important;
+    max-width: 100%; 
+    box-sizing: border-box; 
+  }
+  
+  .select2-selection {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .address-container {
+    width: 100%;
+    max-width: 100%; 
+    box-sizing: border-box;
+    margin-top: 15px;
+  }
+
+  .select2-container .select2-dropdown {
+    width: 50%;
+  }
+  
+  /* Убираем скроллинг страницы при открытии меню */
+  body .select2-container .select2-dropdown {
+    overflow: visible;
+  }
 .address{
     margin-top: 15px;
     margin-right: auto;

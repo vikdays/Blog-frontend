@@ -1,4 +1,3 @@
-import { fetchPost } from './postPage.mjs';
 
 export async function fetchAddress(addressId) {
     const baseUrl = "https://blog.kreosoft.space/api/address/chain";

@@ -1,13 +1,121 @@
 import {fetchUserCommunities} from '../main/communities.mjs';
 import {fetchCommunities} from '../main/communities.mjs';
+import { getAddressId } from './createAddress.js';
 
 const email = localStorage.getItem('userEmail');
+const postId = localStorage.getItem('postId');
 const token = localStorage.getItem('token');
 const userEmail = document.getElementById('user-email');
 const dropdownMenu = document.getElementById('dropdownMenu');
 const dropdownArrow = document.getElementById('dropdownArrow');
+const createButton = document.getElementById('create-btn');
 
+createButton.addEventListener("click", async (e) => {
+    if (postId) {
+        localStorage.removeItem('postId');
+    }
+    
+    e.preventDefault();
+    const communityId = getCommunityId();
+    const post = {
+        title: document.getElementById("title").value,
+        tags: Array.from(document.getElementById("tags").selectedOptions).map(option => option.value),
+        readingTime: document.getElementById("readingTime").value || null,
+        image: document.getElementById("image").value || null,
+        description: document.getElementById("description").value || null,
+        addressId: getAddressId(),   
+        id: communityId,
+    };
+    try {
+        let postId;
+        if (post.id === null) {
+            postId = await createNewPost(post, token);
+        } else {
+            postId = await createCommunityPost(post, communityId, token);
+        }
+        if (postId) {
+            
+            localStorage.setItem('postId', postId);
+            window.location.href = "http://127.0.0.1:5500/postPage/postPage.html";
+        }
+    } catch (error) {
+        console.error("Ошибка при загрузке постов:", error.message);
+    }
+});
 
+async function createNewPost(post, token) {
+    try {
+        const response = await fetch(`https://blog.kreosoft.space/api/post`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'accept': 'text/plain',
+            },
+            body: JSON.stringify({
+                title: post.title,
+                description: post.description,
+                readingTime: post.readingTime,
+                image: post.image,
+                addressId: post.addressId,
+                tags: post.tags
+            }),
+        });
+
+        if (!response.ok) { 
+            const errorText = await response.text();
+            console.error(errorText);
+            return false;
+        }
+        else{
+            const postIdRaw = await response.text();
+            const postId = postIdRaw.replace(/['"]+/g, '');
+            console.log(postId);
+            return postId
+        }
+
+    } catch (error) {
+        console.error("Ошибка при отправке комментария", error.message);
+        return false;
+    }
+}
+
+async function createCommunityPost(post, communityId, token) {
+    try {
+        const response = await fetch(`https://blog.kreosoft.space/api/community/${communityId}/post`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'accept': 'text/plain',
+            },
+            body: JSON.stringify({
+                title: post.title,
+                description: post.description,
+                readingTime: post.readingTime,
+                image: post.image,
+                addressId: post.addressId,
+                tags: post.tags
+            }),
+        });
+
+        if (!response.ok) { 
+            const errorText = await response.text();
+            console.error(errorText);
+            return false;
+        }
+        else{
+            const postIdRaw = await response.text();
+            const postId = postIdRaw.replace(/['"]+/g, '');
+            console.log(postId);
+            return postId
+        }
+
+    } catch (error) {
+        console.error("Ошибка при отправке комментария", error.message);
+        return false;
+    }
+}
 
 document.getElementById("logout").addEventListener("click", async (event) => {
     const response = await fetch('https://blog.kreosoft.space/api/account/logout', {
@@ -71,6 +179,10 @@ async function userCommunities() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    if (!token) {
+        alert('Чтобы написать пост, необходимо авторизоваться');
+        window.location.href = '../createPost/createPost.html'; 
+    }
     const communitySelect = document.getElementById('community');
 
     if (!communitySelect) {
@@ -96,3 +208,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('no admin communities');
     }
 });
+
+function getCommunityId() {
+    const communitySelect = document.getElementById('community');
+    const option = communitySelect.options[communitySelect.selectedIndex];
+    if (option && option.value === '') {
+        return null; 
+    }
+    return option.value;
+}
+

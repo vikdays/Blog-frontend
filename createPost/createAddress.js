@@ -19,6 +19,7 @@ function initializeSelect2($element, placeholder) {
             processResults: function (data) {
                 return {
                     results: data.map(item => ({
+                        objectGuid: item.objectGuid,
                         id: item.objectId, 
                         text: item.text, 
                         objectLevel: item.objectLevel,
@@ -40,6 +41,18 @@ function initializeSelect2($element, placeholder) {
         fieldCount++;
         addNewSelectField('Следующий элемент адреса');
     });
+}
+
+export function getAddressId(){
+    const lastField = document.querySelector(`.field-${fieldCount}`);
+    if (!lastField) return null;
+
+    const select = lastField.querySelector('select');
+    const selectedOption = $(select).select2('data'); 
+    if (selectedOption.length > 0) {
+        return selectedOption[0].objectGuid; 
+    }
+    return null; 
 }
 
 function addNewSelectField(labelText) {
