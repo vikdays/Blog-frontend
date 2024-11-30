@@ -57,7 +57,7 @@ export function renderPosts(posts) {
                 <div class="container-posts-body">
                     <div class="upper">
                         <div class="pretitle">${post.author} - ${new Date(post.createTime).toLocaleString()} в сообществе "${post.communityName ? post.communityName : "415"}"</div>
-                        <a> <h2 class="post-title" data-id=${post.id}>${post.title}</h2> </a>
+                        <a> <h2 class="post-title" data-id=${post.id} data-community-id=${post.communityId}>${post.title}</h2> </a>
                     </div>
                     <div class="down">
                         <div class="post-img">
@@ -79,7 +79,7 @@ export function renderPosts(posts) {
                 <div class="container-posts-footer">
                     <div class="container-posts-comment">
                         <div id="comments-count">${post.commentsCount}</div>
-                        <img src="../images/comment.png" alt="comment" id="comment" class="comment" data-id=${post.id}>
+                        <img src="../images/comment.png" alt="comment" id="comment" class="comment" data-community-id=${post.communityId} data-id=${post.id}>
                     </div>
                     <div class="container-posts-likes">
                         <div id="likes-count">${post.likes}</div>

@@ -6,7 +6,8 @@ import { dislikePost } from './post.mjs';
 import { getURLParams } from './post.mjs';
 import { changePage } from './pagination.mjs';
 import { paginate} from './pagination.mjs';
-import { canUserLike} from './communities.mjs';
+import { canUserLike, fetchCommunityId} from './communities.mjs';
+import {fetchCommunities} from './communities.mjs';
 
 const email = localStorage.getItem('userEmail');
 const token = localStorage.getItem('token');
@@ -96,7 +97,7 @@ document.getElementById("do-btn").addEventListener("click", async (e) => {
     try {
         console.log("tag", filters.tags);
         const { posts, pagination } = await fetchPosts(filters, token);
-        renderPosts(posts); // Отображаем посты
+        renderPosts(posts); 
         paginate(pagination, filters, token);
     } catch (error) {
         console.error("Ошибка при загрузке постов:", error.message);
@@ -210,9 +211,24 @@ document.addEventListener("click", async (e) => {
 
 document.addEventListener("click", async (e) => {
     localStorage.removeItem('postId');
+    localStorage.removeItem('communityId');
     const title = e.target.closest(".post-title");
     if (title) {
         const postId = title.dataset.id; 
+        const communityId = title.dataset.communityId;
+        if (communityId) {
+            try {
+                const data = await fetchCommunityId(communityId);
+                if (data && data.isClosed) {
+                    alert('Вы не можете просматривать пост закрытой группы');
+                    return; 
+                }
+            } catch (error) {
+                console.error("Ошибка проверки группы:", error.message);
+                alert('Произошла ошибка при проверке группы. Повторите попытку позже.');
+                return; 
+            }
+        }
         localStorage.setItem('postId', postId);
         window.location.href = '../postPage/postPage.html'; 
         return;
@@ -221,6 +237,20 @@ document.addEventListener("click", async (e) => {
     const commentIcon = e.target.closest(".comment");
     if (commentIcon) {
         const postId = commentIcon.dataset.id;
+        const communityId = commentIcon.dataset.communityId;
+        if (communityId) {
+            try {
+                const data = await fetchCommunityId(communityId);
+                if (data && data.isClosed) {
+                    alert('Вы не можете просматривать пост закрытой группы');
+                    return;
+                }
+            } catch (error) {
+                console.error("Ошибка проверки группы:", error.message);
+                alert('Произошла ошибка при проверке группы. Повторите попытку позже.');
+                return; 
+            }
+        }
         console.log("postId (комментарии)", postId);
         localStorage.setItem('postId', postId);
 

@@ -34,7 +34,7 @@ export async function renderComments(post) {
             <div class="content">${comment.content ? comment.content : '[Комментарий удален]'}
                 <span class="modified-date">${comment.modifiedDate ? "(изменен)" : ""}</span>
             </div>
-            <div class="pretitle">${new Date(comment.createTime).toLocaleString()}
+            <div class="pretitle">${comment.modifiedDate ? new Date(comment.modifiedDate).toLocaleString() : new Date(comment.createTime).toLocaleString()}
             </div>
         `;
         if (comment.authorId === userId) {

@@ -33,8 +33,29 @@ export async function fetchCommunities() {
     }
     catch (error) {
         console.error(error.message);
+    }  
+}
+
+export async function fetchCommunityId(communityId) {
+    try {
+        const response = await fetch(`https://blog.kreosoft.space/api/community/${communityId}`, {
+            method: "GET",
+            headers: {
+                'accept': `application/json`,
+            },
+        });
+
+        if (!response.ok) { 
+            const errorText = await response.json();
+            console.error("Ошибка получения группы. Статус:", response.status, "Ответ:", errorText);
+        }
+        data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error("Ошибка при запросе группы", error.message);
+        return false;
     }
-       
 }
 
 export async function canUserLike(postComminityId, token) {
