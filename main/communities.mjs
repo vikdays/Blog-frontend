@@ -49,7 +49,7 @@ export async function fetchCommunityId(communityId) {
             const errorText = await response.json();
             console.error("Ошибка получения группы. Статус:", response.status, "Ответ:", errorText);
         }
-        data = await response.json();
+        const data = await response.json();
         return data;
 
     } catch (error) {

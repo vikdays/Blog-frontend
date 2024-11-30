@@ -1,5 +1,4 @@
-import { fetchCommunities } from '../main/communities.mjs';
-import { fetchUserCommunities } from '../main/communities.mjs';
+import { fetchCommunities, fetchUserCommunities } from '../main/communities.mjs';
 const token = localStorage.getItem('token');
 
 async function renderFormContent() {
@@ -13,7 +12,7 @@ async function renderFormContent() {
             const communityElement = document.createElement("div");
             communityElement.classList.add("community");
             communityElement.innerHTML = `
-                <a><h2 class="title">${(community.name).replace(/['"]+/g, '')}</h2></a>
+                <a><h2 class="title" data-id=${community.id}>${(community.name).replace(/['"]+/g, '')} </h2></a>
             `;
 
             formContainer.appendChild(communityElement);
@@ -116,3 +115,14 @@ async function unsubscribeCommunity(communityId, token) {
         return false;
     }
 }
+document.addEventListener("click", async (e) => {
+    localStorage.removeItem('communityId');
+    const title = e.target.closest(".title");
+    if (title) {
+        const communityId = title.dataset.id;
+        localStorage.setItem('communityId', communityId);
+
+        window.location.href = '../communityPage/communityPage.html';
+        return;
+    }
+});

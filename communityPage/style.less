@@ -1,0 +1,148 @@
+@footer-background: rgb(248,249,250);
+@label-background: rgb(247,247,247);
+@border-color: rgb(232,232,232);
+@link-color: #000;
+@blue: rgb(13,110,253);
+@grey: rgb(108,117,125);
+@red: rgb(220,53,69);
+* {
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: Trebuchet MS, sans-serif;
+}
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header{
+    display: flex;
+    min-height: 7%;
+    padding: 1em 2em;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 13px 10px -15px grey;  
+}
+.logo {
+    padding-right: 2em;
+}
+.wrapper {
+    &-left{
+        display: flex;
+        gap: 15px;    
+    }
+    &-right {
+        margin-left: auto;
+    }
+}
+a {
+    text-decoration: none;
+    cursor: pointer;
+    color: @link-color;
+    &:hover{
+        color: @blue;
+    }
+}
+
+footer {
+    background-color: @footer-background;
+    align-items: center;
+    display: flex;
+    border-top: medium solid @border-color;
+    padding-left: 5em;
+    color: darken(@border-color, 50%);
+    min-height: 7%;
+
+}
+main {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: start;
+    justify-content:center;
+}
+.container{
+    min-width: 65%;
+    max-width: 90%;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    &-community{
+        width: 100%;
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 4px;
+        border: thin solid @border-color;
+        &-title{
+            display: flex;
+            margin-top: 5px;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            &-btn{
+                display: flex;
+                gap: 10px;
+                .sub-btn, .create-btn{
+                    padding: 0.6em;
+                    border: thin solid @border-color;
+                    cursor: pointer;
+                    display: inline-block;
+                    background-color: @blue;
+                    color: white;
+                    border-radius: 4px;
+                    &:hover{
+                        background-color: darken(@blue, 5%);
+                    }
+                }
+                .unsub-btn{
+                    padding: 0.6em;
+                    border: thin solid @border-color;
+                    cursor: pointer;
+                    display: inline-block;
+                    background-color: @red;
+                    color: white;
+                    border-radius: 4px;
+                    &:hover{
+                        background-color: darken(@red, 5%);
+                    }
+                }
+            }
+        }
+        .is-closed{
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        &-admins{
+            
+            .admins{
+                
+                margin-top: 15px;
+                .title{
+                    margin-top: 5px;
+                }
+                .admin-item{
+                    display: flex;
+                    gap: 20px;
+
+                    .admin-avatar{
+                        width: 60px;
+                        height: 60px;
+                    }
+                }
+            }
+        }
+        .count-subs {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            #people{
+                width: 20px;
+                height: 20px;
+            }
+            
+        }
+    }
+}
