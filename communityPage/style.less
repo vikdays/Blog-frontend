@@ -19,7 +19,7 @@ html, body {
 
 .header{
     display: flex;
-    min-height: 7%;
+    height: 7%;
     padding: 1em 2em;
     justify-content: space-between;
     align-items: center;
@@ -64,7 +64,7 @@ main {
 }
 .container{
     min-width: 65%;
-    max-width: 90%;
+    max-width: 80%;
     display: flex;
     align-content: center;
     align-items: center;
@@ -85,19 +85,8 @@ main {
             &-btn{
                 display: flex;
                 gap: 10px;
-                .sub-btn, .create-btn{
-                    padding: 0.6em;
-                    border: thin solid @border-color;
-                    cursor: pointer;
-                    display: inline-block;
-                    background-color: @blue;
-                    color: white;
-                    border-radius: 4px;
-                    &:hover{
-                        background-color: darken(@blue, 5%);
-                    }
-                }
-                .unsub-btn{
+                
+                #unsub-btn{
                     padding: 0.6em;
                     border: thin solid @border-color;
                     cursor: pointer;
@@ -145,4 +134,204 @@ main {
             
         }
     }
+    &-filters{
+        display: inline-block;
+        min-height: 100px;
+        margin-top: 10px;
+        width: 100%;
+        border-radius: 4px;
+        
+        border: thin solid @border-color;
+
+        &-filterName{
+            background-color: @label-background;
+            padding: 8px;
+            border-bottom: thin solid @border-color;
+        }
+
+        &-up{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 15px;
+            padding: 10px;
+            gap: 15px;
+
+            .container-field{
+                width: 50%;
+                display: flex;
+                flex-direction: column;
+            }
+            
+        }
+        &-down{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-right: 10px;
+            margin-bottom: 15px;  
+        }
+        
+
+    }
+    #sub-btn, .create-btn, .do-btn{
+        padding: 0.6em;
+        border: thin solid @border-color;
+        cursor: pointer;
+        display: inline-block;
+        background-color: @blue;
+        color: white;
+        border-radius: 4px;
+        &:hover{
+            background-color: darken(@blue, 5%);
+        }
+    }
+    select{
+        border: thin solid darken(@border-color, 10%);
+        border-radius: 3px;
+        width: auto;
+    }
+    .tags{
+        height: 55px;
+        padding: 5px;
+        padding-left: 10px;
+    }
+    .postSorting {
+        width: auto;
+        padding: 5px;
+    }
+    &-down{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+        margin-top: 10px;
+        width: 100%;
+                
+        .pagination {
+            a {
+                padding: 5px 10px;
+                border: 1px solid @blue;
+                border-radius: 3px;
+                background-color: white;
+                color: @blue;
+                cursor: pointer;
+                font-size: 16px;
+
+                &:hover {
+                    background-color: #e7f3ff;
+                }
+                &.active {
+                    background-color: @blue;
+                    color: white;
+                    border-color: @blue;
+                }
+                
+            }
+
+        }
+
+        .count-post{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            &-select{
+                padding: 5px;
+                width: 100%;
+            }
+        }
+    }
+    &-posts{
+        margin-top: 10px;
+        width: 100%;
+        &-footer{
+            background-color: @label-background;
+            display: flex;
+            justify-content: space-between;
+            border: thin solid @border-color;
+            padding: 8px;
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+
+        }
+        .show-more-btn{
+            border: none;
+            background-color: white;
+            font-size: 15px;
+            display: block;
+            cursor: pointer;
+            color: @blue;
+            margin-top: 3px;
+        }
+          
+        &-comment, &-likes{
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        &-body {
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            padding: 15px;
+            border: thin solid @border-color;
+            
+
+            .upper{
+                
+                padding-bottom: 10px;
+                border-bottom: 2px solid @border-color;
+                width: 100%;
+
+                .pretitle{
+                    //font-size: 13px;
+                }
+                .post-title{
+                    margin-top: 10px;
+                    cursor: pointer;
+                }
+            }
+            .down{
+                padding-top: 15px;
+                .post-description{
+                    word-wrap: break-word;
+                    overflow-wrap: break-word; 
+                    white-space: normal;
+                    padding-bottom: 15px;
+                }
+                .post-tags{
+                    color: @grey;
+                    padding-bottom: 5px;
+                }
+                .post-img{
+                    display: flex;
+                    justify-content: center;
+                    margin-bottom: 5px;
+                }
+                .short-description{
+                    word-wrap: break-word;
+                    overflow-wrap: break-word;
+                    white-space: normal;
+                }
+            }
+            
+        }
+    }
 }
+#post-img{
+    max-width: 500px;
+    max-height: 500px;
+}
+.image-button{
+    border: none;
+    margin-top: 5px;
+    background-color: @label-background;
+
+}
+#comment, #like{
+    height: 15px;
+    width: 15px;
+    cursor: pointer;
+}
+
+

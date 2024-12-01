@@ -42,6 +42,10 @@ export function getURLParams() {
 
 export function renderPosts(posts) {
     const postsContainer = document.querySelector(".container-posts");
+    if (!postsContainer) {
+        console.error("Элемент .container-posts не найден");
+        return;
+    }
     postsContainer.innerHTML = "";
 
     if (posts && posts.length > 0) {

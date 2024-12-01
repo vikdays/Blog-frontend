@@ -25,14 +25,63 @@
     </div>
   </header>
   <main>
-    <div class="container" >
+    <div class="container">
+      <div class="container-community">
         
+      </div>
+      <div class="container-filters">
+        <div class="container-filters-filterName">
+            <label>Фильтры</label>
+        </div>
+          <div class="container-filters-up">
+            <div class="container-field" >
+              <label for="postSorting">Сортировать</label>
+              <select class="postSorting" name="postSorting" id="postSorting"></select>
+            </div>
+            <div class="container-field" >
+              <label for="tags" class="label">Поиск по тэгам</label>
+              <select class="tags" name="tags" id="tags" multiple class="select"></select>
+          </div>      
+        </div>
+            <div class="container-filters-down">
+              <button id="do-btn" class="do-btn">Применить</button>
+            </div>
+        </div>
+        <div class="container-posts">
+      
+        </div>
+        <div class="container-down">
+          <div class="pagination">
+            <button class="pagination-prev">&laquo;</button>
+            <button class="pagination-button active" data-page="1">1</button>
+            <button class="pagination-button" data-page="2">2</button>
+            <button class="pagination-button" data-page="3">3</button>
+            <button class="pagination-next">&raquo;</button>
+          </div>
+          <div class="count-post">
+            <label class="count-post-label" for="size">Число постов на странице</label>
+            <select class="count-post-select" name="size" id="size">
+                <option value="5" class="count">5</option>
+                <option value="6" class="count">6</option>
+                <option value="7" class="count">7</option>
+                <option value="8" class="count">8</option>
+                <option value="9" class="count">9</option>
+                <option value="10" class="count">10</option>
+                <option value="11" class="count">11</option>
+                <option value="12" class="count">12</option>
+                <option value="13" class="count">13</option>
+                <option value="14" class="count">14</option>
+                <option value="15" class="count">15</option>
+            </select>
+          </div>
+        </div>
     </div>
-    
   </main>
   <footer>
     <p>© 2022 - Блог №415</p>
   </footer>
   <script src="communityPage.js" type="module"></script>
+  <script src="../main/tags.js" type="module"></script>
+  <script src="../main/postSorting.mjs" type="module"></script>
 </body>
 </html>

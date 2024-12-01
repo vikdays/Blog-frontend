@@ -183,21 +183,24 @@ main {
             .down{
                 padding-top: 15px;
                 .post-description{
+                    word-wrap: break-word;
+                    overflow-wrap: break-word; 
+                    white-space: normal;
                     padding-bottom: 15px;
-                    //font-size: 13px;
                 }
                 .post-tags{
-                    //font-size: 13px;
                     color: @grey;
                     padding-bottom: 5px;
-                }
-                .post-time{
-                    //font-size: 14px;
                 }
                 .post-img{
                     display: flex;
                     justify-content: center;
                     margin-bottom: 5px;
+                }
+                .short-description{
+                    word-wrap: break-word;
+                    overflow-wrap: break-word;
+                    white-space: normal;
                 }
             }
             
@@ -268,7 +271,6 @@ input, select, .checkbox{
     border: thin solid darken(@border-color, 10%);
     border-radius: 3px;
     width: auto;
-   
 }
 .tags{
     height: 55px;

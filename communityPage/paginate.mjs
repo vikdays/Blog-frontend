@@ -1,7 +1,7 @@
-import { renderPosts } from './post.mjs';
-import { fetchPosts } from './post.mjs';
-
-export function paginate(pagination, filters, token) {
+import {fetchPostsCommunity} from './communityPage.js';
+import { renderPosts } from '../main/post.mjs';
+export function paginateCommunity(pagination, filters, token) {
+    const communityId = localStorage.getItem('communityId');
     const { size, count, current } = pagination;
     const totalPages = count;
     const paginationContainer = document.querySelector('.pagination');
@@ -20,7 +20,7 @@ export function paginate(pagination, filters, token) {
         } 
         link.addEventListener('click', (event) => {
             event.preventDefault();
-            if (!isDisabled) changePage(page, filters, token);
+            if (!isDisabled) changeCommunityPage(page, filters, token, communityId);
         });
         return link;
     };
@@ -59,7 +59,7 @@ export function paginate(pagination, filters, token) {
     );
 }
 
-export async function changePage(page, filters, token) {
+export async function changeCommunityPage(page, filters, token, communityId) {
     try {
         filters.page = page;
         
@@ -67,10 +67,9 @@ export async function changePage(page, filters, token) {
         urlParams.set('page', page);
         urlParams.set('pageSize', filters.size);
         history.pushState(null, '', `?${urlParams.toString()}`);
-
-        const { posts, pagination } = await fetchPosts(filters, token);
+        const { posts, pagination } = await fetchPostsCommunity(filters, token, communityId);
         renderPosts(posts);
-        paginate(pagination, filters, token);
+        paginateCommunity(pagination, filters, token);
     } catch (error) {
         console.error('Ошибка при переключении страницы:', error.message);
     }

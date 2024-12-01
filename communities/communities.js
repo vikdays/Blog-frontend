@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-async function subscribeCommunity(communityId, token) {
+export async function subscribeCommunity(communityId, token) {
     try {
         const response = await fetch(
             `https://blog.kreosoft.space/api/community/${communityId}/subscribe`,
@@ -90,7 +90,7 @@ async function subscribeCommunity(communityId, token) {
     }
 }
 
-async function unsubscribeCommunity(communityId, token) {
+export async function unsubscribeCommunity(communityId, token) {
     try {
         const response = await fetch(
             `https://blog.kreosoft.space/api/community/${communityId}/unsubscribe`,
@@ -116,7 +116,7 @@ async function unsubscribeCommunity(communityId, token) {
     }
 }
 document.addEventListener("click", async (e) => {
-    localStorage.removeItem('communityId');
+    //localStorage.removeItem('communityId');
     const title = e.target.closest(".title");
     if (title) {
         const communityId = title.dataset.id;
