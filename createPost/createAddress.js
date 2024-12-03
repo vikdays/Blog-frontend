@@ -4,7 +4,6 @@ let fieldCount = 0;
 const apiUrl = 'https://blog.kreosoft.space/api/address/search'; 
 const container = document.querySelector('.address-container'); 
 function initializeSelect2($element, placeholder) {
-    
     $element.select2({
         placeholder: placeholder, 
         ajax: {

@@ -9,6 +9,7 @@ const userEmail = document.getElementById('user-email');
 const dropdownMenu = document.getElementById('dropdownMenu');
 const dropdownArrow = document.getElementById('dropdownArrow');
 const createButton = document.getElementById('create-btn');
+const communityId = localStorage.getItem('communityId');
 
 createButton.addEventListener("click", async (e) => {
     if (postId) {
@@ -179,6 +180,8 @@ async function userCommunities() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+
+
     if (!token) {
         alert('Чтобы написать пост, необходимо авторизоваться');
         window.location.href = '../createPost/createPost.html'; 
@@ -188,25 +191,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!communitySelect) {
         console.error('communitySelect not found');
     } 
-
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.textContent = 'Без группы';
-    communitySelect.appendChild(defaultOption);
     const adminCommunities = await userCommunities();
-
-    if (adminCommunities.length > 0) {
+    if (communityId) {
         adminCommunities.forEach(community => {
-            const option = document.createElement('option');
-            option.value = community.id;
-            option.textContent = community.name;
-            communitySelect.appendChild(option);
-
+            if (community.id === communityId) {
+                const defaultOption = document.createElement('option');
+                defaultOption.value = community.id;
+                defaultOption.textContent = community.name;
+                communitySelect.appendChild(defaultOption);
+            }
         });
     }
     else{
-        console.log('no admin communities');
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Без группы';
+        communitySelect.appendChild(defaultOption);
+    
+        if (adminCommunities.length > 0) {
+            adminCommunities.forEach(community => {
+                const option = document.createElement('option');
+                option.value = community.id;
+                option.textContent = community.name;
+                communitySelect.appendChild(option);
+
+            });
+        }
+        else{
+            console.log('no admin communities');
+        }
     }
+    
 });
 
 function getCommunityId() {

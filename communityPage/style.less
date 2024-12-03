@@ -64,7 +64,7 @@ main {
 }
 .container{
     min-width: 65%;
-    max-width: 80%;
+    max-width: 70%;
     display: flex;
     align-content: center;
     align-items: center;
@@ -105,9 +105,7 @@ main {
             margin-bottom: 15px;
         }
         &-admins{
-            
             .admins{
-                
                 margin-top: 15px;
                 .title{
                     margin-top: 5px;
@@ -334,4 +332,49 @@ main {
     cursor: pointer;
 }
 
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: thin solid darken(@border-color, 10%);
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-right: 150px;
+    min-width: 130px;
+    z-index: 10;
+
+    a{
+        color: black; 
+        padding: 10px 20px;
+        text-decoration: none;
+        display: block;
+        &:hover{
+            background-color: @footer-background;
+        }
+    }
+}
+.dropdown-content.visible {
+    display: block;
+}
+
+.user-menu {
+    &-email {
+        color: black; 
+        cursor: pointer; 
+        display: inline-block; 
+        
+        margin-right: 5px; 
+        &:hover .dropdown-content {
+            display: block; 
+            position: relative;
+        }
+    }
+}
+
+.dropdown-arrow {
+    color: black; 
+    cursor: pointer; 
+    vertical-align: middle; 
+}
 

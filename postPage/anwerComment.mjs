@@ -32,9 +32,13 @@ export function answerButtonClick(commentElement, parentId) {
         const data = { content, parentId };
 
         try {
-            await postComment(data, postId, token);
-            
-            window.location.reload();
+            if (token) {
+                await postComment(data, postId, token);
+                window.location.reload();
+            }
+            else{
+                alert('Отвечать на комментарии могут писать только авторизованные пользователи');
+            }
         } catch (error) {
             console.error("Ошибка при отправке комментария:", error.message);
         }

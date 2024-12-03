@@ -194,8 +194,13 @@ document.getElementById("send-btn").addEventListener("click", async (e) => {
     const data = {content, parentId}
     console.log(data);
     try {
-        await postComment(data, postId, token);
-        window.location.reload();
+        if (token) {
+            await postComment(data, postId, token);
+            window.location.reload();
+        }
+        else{
+            alert('Комментарии могут писать только авторизованные пользователи');
+        }
         
     } catch (error) {
         console.error('Error:', error.message);

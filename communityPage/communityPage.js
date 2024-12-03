@@ -5,6 +5,45 @@ import { subscribeCommunity, unsubscribeCommunity } from '../communities/communi
 const token = localStorage.getItem('token');
 const communityId = localStorage.getItem('communityId');
 
+const email = localStorage.getItem('userEmail');
+const userEmail = document.getElementById('user-email');
+const dropdownMenu = document.getElementById('dropdownMenu');
+const dropdownArrow = document.getElementById('dropdownArrow');
+
+document.getElementById("logout").addEventListener("click", async (event) => {
+    const response = await fetch('https://blog.kreosoft.space/api/account/logout', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        }
+    })
+    localStorage.clear();
+    window.location.href = '../authorization/authorization.html'; 
+})
+
+document.getElementById("profile").addEventListener("click", async (event) => {
+    window.location.href = '../profile/profile.html'; 
+})
+
+
+if (userEmail) {
+    userEmail.textContent = email || 'Вход';
+} else {
+    console.error('email not found in localStorage');
+
+}
+if (userEmail.textContent === email) {
+    userEmail.addEventListener('click', () => {
+        dropdownMenu.classList.toggle('visible');
+    });
+}
+else{
+    dropdownArrow.style.display = "none";
+    userEmail.addEventListener('click', () => {
+        window.location.href = '../authorization/authorization.html'; 
+    });
+}
+
 async function renderCommunity() {
 
     let myCommunities;
@@ -27,7 +66,7 @@ async function renderCommunity() {
         
         communityContainer.innerHTML = `
              <div class="container-community-title">
-                <a><h1>Группа "${community.name}"</h1></a>
+                <h1>Группа "${community.name}"</h1>
                 <div class="container-community-title-btn">
                     ${isAdmin ? `<button class="create-btn" id="create-btn">Написать пост</button>` : ''}
                     
@@ -47,7 +86,7 @@ async function renderCommunity() {
                 <div class="admins">
                 ${community.administrators.map(admin => `
                      <div class="admin-item">
-                        <img src="../images/${admin.gender === "Male" ? "man.png" : "woman.png"}" alt="${admin.gender}" class="admin-avatar"> 
+                        <img src="../images/${admin.gender === "Male" ? "man1.png" : "women1.png"}" alt="${admin.gender}" class="admin-avatar"> 
                         <h3 class="title">${admin.fullName}</h3>
                    </div>
                 `).join('')}
@@ -55,6 +94,13 @@ async function renderCommunity() {
             </div>
         </div>
         `;
+        if (isAdmin) {
+            document.getElementById("create-btn").addEventListener("click", async (e) => {
+                if (token) {
+                    window.location.href = '../createPost/createPost.html'; 
+                }
+            });
+        }
     } else {
         communityContainer.innerHTML = "<p>Нет постов для отображения.</p>";
     }

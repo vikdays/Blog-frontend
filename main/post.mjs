@@ -31,15 +31,6 @@ export async function fetchPosts(filters = {}, token = null) {
         return { posts: [], pagination: { size: 0, count: 0, current: 1 } };
     }
 }
-
-export function getURLParams() {
-    const params = new URLSearchParams(window.location.search);
-    return {
-        page: parseInt(params.get('page'), 10) || 1,
-        size:  parseInt(params.get('pageSize'), 10) || 1,
-    }
-}
-
 export function renderPosts(posts) {
     const postsContainer = document.querySelector(".container-posts");
     if (!postsContainer) {

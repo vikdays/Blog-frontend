@@ -116,7 +116,6 @@ export async function unsubscribeCommunity(communityId, token) {
     }
 }
 document.addEventListener("click", async (e) => {
-    //localStorage.removeItem('communityId');
     const title = e.target.closest(".title");
     if (title) {
         const communityId = title.dataset.id;

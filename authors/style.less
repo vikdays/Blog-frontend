@@ -1,0 +1,129 @@
+@footer-background: rgb(248,249,250);
+@label-background: rgb(247,247,247);
+@border-color: rgb(232,232,232);
+@link-color: #000;
+@blue: rgb(13,110,253);
+@grey: rgb(108,117,125);
+* {
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: Trebuchet MS, sans-serif;
+}
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.header{
+    display: flex;
+    height: 7%;
+    padding: 1em 2em;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 13px 10px -15px grey;  
+}
+.logo {
+    padding-right: 2em;
+}
+.wrapper {
+    &-left{
+        display: flex;
+        gap: 15px;    
+    }
+    &-right {
+        margin-left: auto;
+    }
+}
+a {
+    text-decoration: none;
+    cursor: pointer;
+    color: @link-color;
+    &:hover{
+        color: @blue;
+    }
+}
+
+footer {
+    background-color: @footer-background;
+    align-items: center;
+    display: flex;
+    border-top: medium solid @border-color;
+    padding-left: 5em;
+    color: darken(@border-color, 50%);
+    min-height: 7%;
+
+}
+main {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: start;
+    justify-content:center;
+}
+.container{
+    width: 75%;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    &-authors{
+        width: 100%;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        &-card {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: thin solid darken(@border-color, 10%);
+            &-left{
+                display: flex;
+                gap: 15px;
+                .crown{
+                    position: absolute;
+                    transform: rotate(30deg);
+                    padding-left: 20px;
+                    padding-right: 100px;
+                    //left: 1px;
+                }
+                &-desc{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-evenly;
+                    &-up, &-down{
+                        display: flex;
+                        align-items: baseline;
+                        gap: 5px;
+                        .create-text{
+                            color: grey;
+                            display: flex;
+                        }
+
+                    }
+                    
+                }
+                .admin-avatar{
+                    width: 60px;
+                    height: 60px;
+                }
+            }
+            &-right{
+                display: flex;
+                gap: 10px;
+                &-inf{
+                    //display: block;
+                    padding-top: 2px;
+                    padding-bottom: 2px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    border-radius: 5px;
+                    background-color: @blue;
+                    color: white;
+                }
+            }
+        }
+    }
+}

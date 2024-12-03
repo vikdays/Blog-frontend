@@ -57,6 +57,12 @@ gulp.task('less-communityPage', function() {
         .pipe(cleanCss())
         .pipe(gulp.dest('./communityPage'));
 })
+gulp.task('less-authors', function() {
+    return gulp.src('./authors/style.less')
+        .pipe(less())
+        .pipe(cleanCss())
+        .pipe(gulp.dest('./authors'));
+})
 
 gulp.task('watch', function() {
     gulp.watch('./authorization/style.less', gulp.series('less-authorization'));
@@ -67,10 +73,11 @@ gulp.task('watch', function() {
     gulp.watch('./createPost/style.less', gulp.series('less-createPost'));
     gulp.watch('./communities/style.less', gulp.series('less-communities'));
     gulp.watch('./communityPage/style.less', gulp.series('less-communityPage'));
+    gulp.watch('./authors/style.less', gulp.series('less-authors'));
 })
 
 
 gulp.task('less', gulp.series('less-authorization', 'less-registration', 'less-profile', 'less-main', 'less-postPage', 'less-createPost', 'less-communities',
-    'less-communityPage'
+    'less-communityPage', 'less-authors'
 ));
 gulp.task('default', gulp.series('less', 'watch'));
