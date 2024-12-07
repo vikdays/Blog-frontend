@@ -8,7 +8,9 @@ export async function fetchPosts(filters = {}, token = null) {
 
     if (filters.author) params.append("author", filters.author);
     if (filters.tags && filters.tags.length > 0) {
-        filters.tags.forEach(tag => params.append("tags", tag)); 
+        filters.tags
+            .filter(tag => tag.trim()) 
+            .forEach(tag => params.append("tags", tag));
     }
     if (filters.min) params.append("min", filters.min);
     if (filters.max) params.append("max", filters.max);

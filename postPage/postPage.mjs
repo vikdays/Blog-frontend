@@ -1,7 +1,6 @@
 const postId = localStorage.getItem('postId');
 const token = localStorage.getItem('token');
-const email = localStorage.getItem('userEmail');
-const userEmail = document.getElementById('user-email');
+import '../profile/dropdownMenu.mjs';
 import { fetchAddress} from './address.mjs';
 import { likePost, dislikePost } from '../main/post.mjs';
 import { renderComments, postComment } from './comments.mjs';
@@ -154,39 +153,6 @@ document.addEventListener("click", async (event) => {
     }
 });
 
-document.getElementById("logout").addEventListener("click", async (event) => {
-    const response = await fetch('https://blog.kreosoft.space/api/account/logout', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        }
-    })
-    localStorage.clear();
-    window.location.href = '../authorization/authorization.html'; 
-})
-
-document.getElementById("profile").addEventListener("click", async (event) => {
-    window.location.href = '../profile/profile.html'; 
-})
-
-if (userEmail) {
-    userEmail.textContent = email || 'Вход';
-} else {
-    console.error('email not found in localStorage');
-
-}
-if (userEmail.textContent === email) {
-    userEmail.addEventListener('click', () => {
-        dropdownMenu.classList.toggle('visible');
-    });
-}
-else{
-    dropdownArrow.style.display = "none";
-    userEmail.addEventListener('click', () => {
-        window.location.href = '../authorization/authorization.html'; 
-    });
-}
-
 document.getElementById("send-btn").addEventListener("click", async (e) => {
     e.preventDefault();
     const parentId = null;
@@ -194,12 +160,19 @@ document.getElementById("send-btn").addEventListener("click", async (e) => {
     const data = {content, parentId}
     console.log(data);
     try {
-        if (token) {
+        
+        if (!content) {
+            alert('Нельзя отправить пустой комментарий')
+        }
+        else if(!token){
+            alert('Комментарии могут писать только авторизованные пользователи');
+        }
+        else if (token) {
             await postComment(data, postId, token);
             window.location.reload();
         }
         else{
-            alert('Комментарии могут писать только авторизованные пользователи');
+            alert(error.message);
         }
         
     } catch (error) {

@@ -127,3 +127,48 @@ main {
         }
     }
 }
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: thin solid darken(@border-color, 10%);
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-right: 150px;
+    min-width: 130px;
+    z-index: 10;
+
+    a{
+        color: black; 
+        padding: 10px 20px;
+        text-decoration: none;
+        display: block;
+        &:hover{
+            background-color: @footer-background;
+        }
+    }
+}
+.dropdown-content.visible {
+    display: block;
+}
+
+.user-menu {
+    &-email {
+        color: black; 
+        cursor: pointer; 
+        display: inline-block; 
+        
+        margin-right: 5px; 
+        &:hover .dropdown-content {
+            display: block; 
+            position: relative;
+        }
+    }
+}
+
+.dropdown-arrow {
+    color: black; 
+    cursor: pointer; 
+    vertical-align: middle; 
+}

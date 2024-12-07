@@ -12,5 +12,8 @@
     "gulp": "^5.0.0",
     "gulp-clean-css": "^4.3.0",
     "gulp-less": "^5.0.0"
+  },
+  "dependencies": {
+    "express": "^4.21.1"
   }
 }

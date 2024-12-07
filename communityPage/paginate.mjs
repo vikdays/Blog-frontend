@@ -12,7 +12,7 @@ export function paginateCommunity(pagination, filters, token) {
     const createLink = (text, page, isActive = false, isDisabled = false) => {
         const link = document.createElement('a');
         link.textContent = text;
-        link.href = `?page=${page}&pageSize=${size}`;
+        link.href = `?page=${page}&size=${size}`;
         link.className = isActive ? 'active' : "";
         if (isDisabled){
             link.classList.add('disabled');
@@ -65,7 +65,7 @@ export async function changeCommunityPage(page, filters, token, communityId) {
         
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set('page', page);
-        urlParams.set('pageSize', filters.size);
+        urlParams.set('size', filters.size);
         history.pushState(null, '', `?${urlParams.toString()}`);
         const { posts, pagination } = await fetchPostsCommunity(filters, token, communityId);
         renderPosts(posts);

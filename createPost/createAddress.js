@@ -6,6 +6,7 @@ const container = document.querySelector('.address-container');
 function initializeSelect2($element, placeholder) {
     $element.select2({
         placeholder: placeholder, 
+        dropdownParent: $('.address-container'),
         ajax: {
             url: apiUrl, 
             dataType: 'json', 

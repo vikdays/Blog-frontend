@@ -27,7 +27,6 @@ html, body {
 }
 .logo {
     padding-right: 2em;
-    //font-size: 18px;
 }
 .wrapper {
     &-left{
@@ -39,7 +38,6 @@ html, body {
     }
 }
 a {
-    //font-size: 14px;
     text-decoration: none;
     color: @link-color;
     &:hover{
@@ -53,10 +51,8 @@ footer {
     display: flex;
     border-top: medium solid @border-color;
     padding-left: 5em;
-    //font-size: 0.8em;
     color: darken(@border-color, 50%);
     min-height: 7%;
-    //font-size: 15px;
 }
 main {
     flex: 1 1 auto;
@@ -66,9 +62,8 @@ main {
 }
 
 .container{
-    //display: flex;
-    min-width: 65%;
-    max-width: 70%;
+    min-width: 70%;
+    max-width: 90%;
     
     &-posts{
         margin-top: 10px;
@@ -107,15 +102,10 @@ main {
                 padding-top: 15px;
                 .post-description{
                     padding-bottom: 15px;
-                    //font-size: 13px;
                 }
                 .post-tags{
-                    //font-size: 13px;
                     color: @grey;
                     padding-bottom: 5px;
-                }
-                .post-time{
-                    //font-size: 14px;
                 }
                 .post-img{
                     display: flex;
@@ -124,6 +114,7 @@ main {
                 }
                 .post-geo{
                     display: flex;
+                    align-items: center;
                     margin-top: 5px;
                     gap: 5px;
                 }
@@ -156,7 +147,6 @@ main {
 
             .pretitle{
                 margin-bottom: 10px;
-                font-size: 12px;
                 display: flex;
                 gap: 10px;
             }
@@ -164,7 +154,6 @@ main {
                 margin-bottom: 10px;
 
                 .modified-date{
-                    font-size: 10px;
                     color: @grey;
                 }
             }
@@ -173,7 +162,6 @@ main {
                 background-color: white;
                 cursor: pointer;
                 color: @blue;
-                //margin-top: 3px;
                 .answer{
                     display: flex;
                 }
@@ -235,7 +223,6 @@ main {
             border-top-right-radius: 3px;
             border: thin solid @border-color;
             width: 100%;
-            font-size: 15px;
             height: 100px;
             display: block;
             margin-top: 5px;
@@ -280,7 +267,6 @@ main {
     height: 18px;
     width: 20px;
     margin-top: 3px;
-    //position: absolute;
 }
 
 .dropdown-content {

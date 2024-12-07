@@ -1,5 +1,8 @@
 import { fetchCommunities, fetchUserCommunities } from '../main/communities.mjs';
+import '../profile/dropdownMenu.mjs';
 const token = localStorage.getItem('token');
+const email = localStorage.getItem('userEmail');
+const userEmail = document.getElementById('user-email');
 
 async function renderFormContent() {
     const communities = await fetchCommunities();
@@ -125,3 +128,4 @@ document.addEventListener("click", async (e) => {
         return;
     }
 });
+

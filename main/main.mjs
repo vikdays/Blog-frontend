@@ -2,30 +2,11 @@ import { renderPosts } from './post.mjs';
 import { fetchPosts } from './post.mjs';
 import { likePost } from './post.mjs';
 import { dislikePost } from './post.mjs';
-import { paginate} from './pagination.mjs';
-import { canUserLike, fetchCommunityId} from './communities.mjs';
+import { createPagination} from './pagination.mjs';
+import { canUserLike} from './communities.mjs';
+import '../profile/dropdownMenu.mjs';
 
-
-const email = localStorage.getItem('userEmail');
 const token = localStorage.getItem('token');
-const userEmail = document.getElementById('user-email');
-const dropdownMenu = document.getElementById('dropdownMenu');
-const dropdownArrow = document.getElementById('dropdownArrow');
-
-document.getElementById("logout").addEventListener("click", async (event) => {
-    const response = await fetch('https://blog.kreosoft.space/api/account/logout', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        }
-    })
-    localStorage.clear();
-    window.location.href = '../authorization/authorization.html'; 
-})
-
-document.getElementById("profile").addEventListener("click", async (event) => {
-    window.location.href = '../profile/profile.html'; 
-})
 
 document.getElementById("post-btn").addEventListener("click", async (e) => {
     if (token) {
@@ -35,87 +16,6 @@ document.getElementById("post-btn").addEventListener("click", async (e) => {
         alert('Чтобы написать пост необходимо авторизоваться');
     }
 });
-
-if (userEmail) {
-    userEmail.textContent = email || 'Вход';
-} else {
-    console.error('email not found in localStorage');
-
-}
-if (userEmail.textContent === email) {
-    userEmail.addEventListener('click', () => {
-        dropdownMenu.classList.toggle('visible');
-    });
-}
-else{
-    dropdownArrow.style.display = "none";
-    userEmail.addEventListener('click', () => {
-        window.location.href = '../authorization/authorization.html'; 
-    });
-}
-
-
-/*document.getElementById("do-btn").addEventListener("click", async (e) => {
-    e.preventDefault();
-
-    const { page, size } = getURLParams();
-
-    const filters = {
-        author: document.getElementById("author").value,
-        tags: Array.from(document.getElementById("tags").selectedOptions).map(option => option.value),
-        min: document.getElementById("min").value,
-        max: document.getElementById("max").value,
-        onlyMyCommunities: document.getElementById("onlyMineCommunities").checked,
-        size: parseInt(document.getElementById("size").value, 10) || size,
-        page,
-        postSorting: document.getElementById("postSorting").value,
-    };
-    const urlParams = new URLSearchParams(window.location.search);
-        urlParams.set('page', page);
-        urlParams.set('size', filters.size);
-        history.pushState(null, '', `?${urlParams.toString()}`);
-
-    try {
-        console.log("tag", filters.tags);
-        const { posts, pagination } = await fetchPosts(filters, token);
-        renderPosts(posts); 
-        paginate(pagination, filters, token);
-    } catch (error) {
-        console.error("Ошибка при загрузке постов:", error.message);
-    }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const { page, size } = {page: 1, size: 5}
-
-    const filters = {
-        size,
-        page,
-    };
-
-    const getCurrentPage = () => {
-        const activeButton = document.querySelector('a.active');
-        return activeButton ? parseInt(activeButton.value, 10) || 1 : 1;
-    };
-    const loadPage = async () => {
-        const page = getCurrentPage();
-        try {
-            changePage(page, filters, token);
-            const { posts, pagination } = await fetchPosts(filters, token);
-            renderPosts(posts);
-            paginate(pagination, filters, token);
-        } catch (error) {
-            console.error("Ошибка при загрузке постов:", error.message);
-        }
-    };
-    loadPage();
-
-    document.addEventListener('click', (event) => {
-        if (event.target.tagName === 'a' && event.target.classList.contains('active')) {
-            loadPage(); 
-        }
-    });
-});*/
 document.getElementById("do-btn").addEventListener("click", async (e) => {
     e.preventDefault();
 
@@ -234,8 +134,6 @@ document.addEventListener("click", async (e) => {
     }
 });
 
-
-
 document.addEventListener("click", async (e) => {
     localStorage.removeItem('postId');
     localStorage.removeItem('communityId');
@@ -258,3 +156,27 @@ document.addEventListener("click", async (e) => {
     }
 });
 
+
+export function paginate(pagination, filters, token) {
+    createPagination(pagination, filters, token, (page) => {
+        changePage(page, filters, token);
+    });
+}
+
+export async function changePage(page, filters, token) {
+    try {
+        filters.page = page;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('page', page);
+        urlParams.set('size', filters.size);
+        history.pushState(null, '', `?${urlParams.toString()}`);
+
+        const { posts, pagination } = await fetchPosts(filters, token);
+        renderPosts(posts);
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        paginate(pagination, filters, token);
+    } catch (error) {
+        console.error('Ошибка при переключении страницы:', error.message);
+    }
+}

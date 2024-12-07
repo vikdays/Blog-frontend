@@ -1,48 +1,10 @@
 import { fetchCommunityId, fetchUserCommunities } from '../main/communities.mjs';
 import { renderPosts } from '../main/post.mjs';
-import { paginateCommunity, changeCommunityPage } from './paginate.mjs';
+import { createPagination } from '../main/pagination.mjs';
 import { subscribeCommunity, unsubscribeCommunity } from '../communities/communities.js';
+import '../profile/dropdownMenu.mjs';
 const token = localStorage.getItem('token');
 const communityId = localStorage.getItem('communityId');
-
-const email = localStorage.getItem('userEmail');
-const userEmail = document.getElementById('user-email');
-const dropdownMenu = document.getElementById('dropdownMenu');
-const dropdownArrow = document.getElementById('dropdownArrow');
-
-document.getElementById("logout").addEventListener("click", async (event) => {
-    const response = await fetch('https://blog.kreosoft.space/api/account/logout', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        }
-    })
-    localStorage.clear();
-    window.location.href = '../authorization/authorization.html'; 
-})
-
-document.getElementById("profile").addEventListener("click", async (event) => {
-    window.location.href = '../profile/profile.html'; 
-})
-
-
-if (userEmail) {
-    userEmail.textContent = email || 'Вход';
-} else {
-    console.error('email not found in localStorage');
-
-}
-if (userEmail.textContent === email) {
-    userEmail.addEventListener('click', () => {
-        dropdownMenu.classList.toggle('visible');
-    });
-}
-else{
-    dropdownArrow.style.display = "none";
-    userEmail.addEventListener('click', () => {
-        window.location.href = '../authorization/authorization.html'; 
-    });
-}
 
 async function renderCommunity() {
 
@@ -108,41 +70,23 @@ async function renderCommunity() {
 
 
 document.addEventListener('DOMContentLoaded', async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const filters = {
+        tags: urlParams.getAll('tags'),
+        sorting: urlParams.get('sorting') || 'CreateDesc',
+        page: parseInt(urlParams.get('page'), 10) || 1,
+        size: parseInt(urlParams.get('size'), 10) || 5,
+    };
+
     try {
         await renderCommunity();
+        const { posts, pagination } = await fetchPostsCommunity(filters, token, communityId);
+        renderPosts(posts);
+        paginateCommunity(pagination, filters, token);
+        
     } catch (error) {
         console.error("Ошибка при загрузке групп", error.message);
     }
-    const { page, size } = {page: 1, size: 5}
-
-    const filters = {
-        size,
-        page,
-    };
-
-    const getCurrentPage = () => {
-        const activeButton = document.querySelector('a.active');
-        return activeButton ? parseInt(activeButton.value, 10) || 1 : 1;
-    };
-    const loadPage = async () => {
-        const page = getCurrentPage();
-        try {
-           
-            changeCommunityPage(page, filters, token, communityId);
-            const { posts, pagination } = await fetchPostsCommunity(filters, token, communityId);
-            renderPosts(posts);
-            paginateCommunity(pagination, filters, token);
-        } catch (error) {
-            console.error("Ошибка при загрузке постов:", error.message);
-        }
-    };
-    loadPage();
-
-    document.addEventListener('click', (event) => {
-        if (event.target.tagName === 'a' && event.target.classList.contains('active')) {
-            loadPage(); 
-        }
-    });
 });
 export async function fetchPostsCommunity(filters = {}, token = null, communityId) {
     if (!communityId) {
@@ -154,9 +98,11 @@ export async function fetchPostsCommunity(filters = {}, token = null, communityI
     const params = new URLSearchParams();
     params.append("page", filters.page || 1);
     params.append("size", filters.size || 5);
-    if (filters.postSorting) params.append("sorting", filters.postSorting);
+    if (filters.sorting) params.append("sorting", filters.sorting);
     if (filters.tags && filters.tags.length > 0) {
-        filters.tags.forEach(tag => params.append("tags", tag)); 
+        filters.tags
+            .filter(tag => tag.trim()) 
+            .forEach(tag => params.append("tags", tag));
     }
 
     const headers = {};
@@ -182,28 +128,18 @@ export async function fetchPostsCommunity(filters = {}, token = null, communityI
     }
 }
 
-export function getURLParams() {
-    const params = new URLSearchParams(window.location.search);
-    return {
-        page: parseInt(params.get('page'), 10) || 1,
-        size:  parseInt(params.get('pageSize'), 10) || 1,
-    }
-}
 
 document.getElementById("do-btn").addEventListener("click", async (e) => {
     e.preventDefault();
-    const { page, size } = getURLParams();
 
     const filters = {
-        tags: Array.from(document.getElementById("tags").selectedOptions).map(option => option.value),
+        tags: Array.from(document.getElementById("tags").selectedOptions).map(option => option.value).filter(Boolean),
         size: parseInt(document.getElementById("size").value, 10) || size,
-        page,
-        postSorting: document.getElementById("postSorting").value,
+        page: 1,
+        sorting: document.getElementById("postSorting").value,
     };
-    const urlParams = new URLSearchParams(window.location.search);
-        urlParams.set('page', page);
-        urlParams.set('pageSize', filters.size);
-        history.pushState(null, '', `?${urlParams.toString()}`);
+    const urlParams = new URLSearchParams(filters);
+    history.pushState(null, '', `?${urlParams.toString()}`);
 
     try {
         const { posts, pagination } = await fetchPostsCommunity(filters, token, communityId);
@@ -331,3 +267,27 @@ document.addEventListener("click", async (event) => {
         }
     }
 });
+export function paginateCommunity(pagination, filters, token) {
+    const communityId = localStorage.getItem('communityId');
+    createPagination(pagination, filters, token, (page) => {
+        changeCommunityPage(page, filters, token, communityId);
+    });
+}
+
+export async function changeCommunityPage(page, filters, token, communityId) {
+    try {
+        filters.page = page;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('page', page);
+        urlParams.set('size', filters.size);
+        history.pushState(null, '', `?${urlParams.toString()}`);
+
+        const { posts, pagination } = await fetchPostsCommunity(filters, token, communityId);
+        renderPosts(posts);
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        paginateCommunity(pagination, filters, token);
+    } catch (error) {
+        console.error('Ошибка при переключении страницы:', error.message);
+    }
+}
