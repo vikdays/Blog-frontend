@@ -42,8 +42,34 @@ document.getElementById("do-btn").addEventListener("click", async (e) => {
     }
 });
 
+document.getElementById("size").addEventListener("change", async (e) => {
+    const size = parseInt(e.target.value, 10) || 5;
+    const urlParams = new URLSearchParams(window.location.search);
+    const filters = {
+        tags: urlParams.getAll('tags'),
+        author: urlParams.get('author') || '',
+        postSorting: urlParams.get('sorting') || 'CreateDesc',
+        onlyMyCommunities: urlParams.get('onlyMyCommunities') === 'true',
+        min: document.getElementById("min").value,
+        max: document.getElementById("max").value,
+        page: 1,
+        size: size,
+    };
+    const url = new URLSearchParams(filters);
+    history.pushState(null, '', `?${url.toString()}`);
+    try {
+        const { posts, pagination } = await fetchPosts(filters, token);
+        renderPosts(posts); 
+        paginate(pagination, filters, token); 
+    } catch (error) {
+        console.error("Ошибка при изменении количества постов на странице:", error.message);
+    }
+});
+
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
+    const select = document.getElementById('size');
+    select.value = parseInt(urlParams.get('size'), 10) || 5;
     const filters = {
         tags: urlParams.getAll('tags'),
         author: urlParams.get('author') || '',
@@ -54,6 +80,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         page: parseInt(urlParams.get('page'), 10) || 1,
         size: parseInt(urlParams.get('size'), 10) || 5,
     };
+    const author = document.getElementById("author");
+    author.value = urlParams.get('author');
 
     try {
         const { posts, pagination } = await fetchPosts(filters, token);

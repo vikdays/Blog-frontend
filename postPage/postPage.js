@@ -37,8 +37,6 @@ export async function renderPost(post) {
         if (post.addressId !== null) {
             var formattedAddress = await fetchAddress(post.addressId);
         }
-        
-
         postElement.innerHTML = `
             <div class="container-posts-body">
                 <div class="upper">

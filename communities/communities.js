@@ -1,8 +1,6 @@
 import { fetchCommunities, fetchUserCommunities } from '../main/communities.mjs';
 import '../profile/dropdownMenu.mjs';
 const token = localStorage.getItem('token');
-const email = localStorage.getItem('userEmail');
-const userEmail = document.getElementById('user-email');
 
 async function renderFormContent() {
     const communities = await fetchCommunities();
@@ -118,6 +116,7 @@ export async function unsubscribeCommunity(communityId, token) {
         return false;
     }
 }
+
 document.addEventListener("click", async (e) => {
     const title = e.target.closest(".title");
     if (title) {

@@ -73,30 +73,10 @@
       </div>
       <div class="container-posts">
         <div class="container-posts-body">
-          <div class="upper">
-            <div class="pretitle">${post.author} - ${post.createTime} в сообществе "${post.communityName}"</div>
-            <h2 class="post-title">${post.title}</h2>
-          </div>
-          <div class="down" >
-            <p class="post-description">${post.description}</p>
-            <p class="post-tags"> ${post.tags.map(tag => tag.name).join(" ")}</p>
-            <p class="post-time">Время чтения: ${post.readingTime} мин.</p>
-          </div>
+          
         </div>
         <div class="container-posts-footer">
-          <div class="container-posts-comment">
-            <div id="comments-count">1</div>
-            <img src="../images/comment.png" alt="comment" id="comment">
-          </div>
-          <div class="container-posts-likes">
-            <div id="likes-count">${post.likes}</div>
-             <button class="image-button">
-                <img id="like"
-                   
-                    class="like-img"
-                >
-            </button>
-        </div>
+          
           
         </div>
       </div>
@@ -106,30 +86,18 @@
         <div class="count-post">
           <label class="count-post-label" for="size">Число постов на странице</label>
           <select class="count-post-select" name="size" id="size">
-              <option value="5" class="count">5</option>
-              <option value="6" class="count">6</option>
-              <option value="7" class="count">7</option>
-              <option value="8" class="count">8</option>
-              <option value="9" class="count">9</option>
-              <option value="10" class="count">10</option>
-              <option value="11" class="count">11</option>
-              <option value="12" class="count">12</option>
-              <option value="13" class="count">13</option>
-              <option value="14" class="count">14</option>
-              <option value="15" class="count">15</option>
           </select>
       </div>
       </div>
-      
     </div>
-    
   </main>
   <footer>
     <p>© 2022 - Блог №415</p>
   </footer>
   <script src="postSorting.mjs" type="module"></script>
-  <script src="main.mjs" type="module"></script>
+  <script src="main.js" type="module"></script>
   <script src="tags.js" type="module"></script>
+  <script src="select.js" type="module"></script>
   <script src="post.mjs" type="module"></script>
   <script src="pagination.mjs" type="module"></script>
   <script src="communities.mjs" type="module"></script>

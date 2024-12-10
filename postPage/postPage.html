@@ -28,43 +28,16 @@
     <div class="container">
         <div class="container-posts">
             <div class="container-posts-body">
-              <div class="upper">
-                <div class="pretitle">${post.author} - ${post.createTime} в сообществе "${post.communityName}"</div>
-                <h2 class="post-title">${post.title}</h2>
-              </div>
-              <div class="down" >
-                <p class="post-description">${post.description}</p>
-                <p class="post-tags"> ${post.tags.map(tag => tag.name).join(" ")}</p>
-                <p class="post-time">Время чтения: ${post.readingTime} мин.</p>
-                <div class="post-geo">
-                    <img src="../images/geo.png" alt="geo" id="geo">
-                    <div id="geo">${post.addressId}</div>
-                </div>
-              </div>
+              
             </div>
             <div class="container-posts-footer">
-                <div class="container-posts-comment">
-                    <div id="comments-count">${post.commentsCount}</div>
-                    <img src="../images/comment.png" alt="comment" id="comment">
-                </div>
-                <div class="container-posts-likes">
-                    <div id="likes-count">${post.likes}</div>
-                     <button class="image-button" data-id=${post.id} data-community-id=${post.communityId}>
-                        <img id="like" class="like-img"
-                        >
-                    </button>
-                </div>
+                
             </div>
         </div>
         <div class="container-comments" id="comments-section">
             <h2 class="container-comments-title">Комментарии</h2>
             <div class="container-comments-box">
-                <div class="pretitle">${comment.author}</div>
-                <div class="content">${comment.content}</div>
-                <div class="pretitle">${new Date(post.createTime).toLocaleString()}
-                    <button class="answer" id="aswer-btn">Ответить</button>
-                </div>
-                <button class="show-answers">Раскрыть ответы</button>
+                
             </div>
         </div>
         <div class="container-addComment">
@@ -79,6 +52,6 @@
   <footer>
     <p>© 2022 - Блог №415</p>
   </footer>
-  <script src="postPage.mjs" type="module"></script>
+  <script src="postPage.js" type="module"></script>
 </body>
 </html>

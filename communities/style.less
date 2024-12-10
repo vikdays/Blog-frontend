@@ -19,7 +19,7 @@ html, body {
 
 .header{
     display: flex;
-    height: 7%;
+    min-height: 7%;
     padding: 1em 2em;
     justify-content: space-between;
     align-items: center;
@@ -63,7 +63,7 @@ main {
     justify-content:center;
 }
 .container {
-    min-width: 65%;
+    min-width: 70%;
     max-width: 90%;
     display: flex;
     align-content: center;
@@ -140,8 +140,10 @@ main {
         color: black; 
         cursor: pointer; 
         display: inline-block; 
-        
         margin-right: 5px; 
+        &:hover{
+            color: @blue;
+        }
         &:hover .dropdown-content {
             display: block; 
             position: relative;
@@ -152,5 +154,6 @@ main {
 .dropdown-arrow {
     color: black; 
     cursor: pointer; 
+    font-size: 0.5em; 
     vertical-align: middle; 
 }

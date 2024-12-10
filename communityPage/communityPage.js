@@ -71,6 +71,8 @@ async function renderCommunity() {
 
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
+    const select = document.getElementById('size');
+    select.value = parseInt(urlParams.get('size'), 10) || 5;
     const filters = {
         tags: urlParams.getAll('tags'),
         sorting: urlParams.get('sorting') || 'CreateDesc',
@@ -150,6 +152,26 @@ document.getElementById("do-btn").addEventListener("click", async (e) => {
     }
 });
 
+document.getElementById("size").addEventListener("change", async (e) => {
+    const size = parseInt(e.target.value, 10) || 5;
+    const urlParams = new URLSearchParams(window.location.search);
+    const filters = {
+        tags: urlParams.getAll('tags'),
+        postSorting: urlParams.get('sorting') || 'CreateDesc',
+        page: 1,
+        size: size,
+    };
+    const url = new URLSearchParams(filters);
+    history.pushState(null, '', `?${url.toString()}`);
+    try {
+        const { posts, pagination } = await fetchPostsCommunity(filters, token, communityId);
+        renderPosts(posts); 
+        paginateCommunity(pagination, filters, token); 
+    } catch (error) {
+        console.error("Ошибка при изменении количества постов на странице:", error.message);
+    }
+});
+
 document.addEventListener("click", async (event) => {
     const button = event.target;
 
@@ -207,7 +229,6 @@ document.addEventListener("click", async (e) => {
     const commentIcon = e.target.closest(".comment");
     if (commentIcon) {
         const postId = commentIcon.dataset.id;
-        console.log("postId (комментарии)", postId);
         localStorage.setItem('postId', postId);
 
         window.location.href = '../postPage/postPage.html#comments-section';

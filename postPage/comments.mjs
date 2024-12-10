@@ -32,7 +32,7 @@ export async function renderComments(post) {
             </div>
             <div class="edit-form"></div>
             <div class="content">${comment.content ? comment.content : '[Комментарий удален]'}
-                <span class="modified-date">${comment.modifiedDate ? "(изменен)" : ""}</span>
+                <span class="modified-date">${comment.modifiedDate && comment.conten ? "(изменен)" : ""}</span>
             </div>
             <div class="pretitle">${comment.modifiedDate ? new Date(comment.modifiedDate).toLocaleString() : new Date(comment.createTime).toLocaleString()}
             </div>

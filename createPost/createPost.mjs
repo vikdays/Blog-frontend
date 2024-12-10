@@ -63,6 +63,9 @@ async function createNewPost(post, token) {
         if (!response.ok) { 
             const errorText = await response.text();
             console.error(errorText);
+            if (response.status === 400) {
+                alert(response.title.message );
+            }
             return false;
         }
         else{

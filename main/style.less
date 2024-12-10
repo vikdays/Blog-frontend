@@ -26,7 +26,6 @@ html, body {
 }
 .logo {
     padding-right: 2em;
-    //font-size: 18px;
 }
 .wrapper {
     &-left{
@@ -38,7 +37,6 @@ html, body {
     }
 }
 a {
-    //font-size: 14px;
     text-decoration: none;
     color: @link-color;
     &:hover{
@@ -52,10 +50,8 @@ footer {
     display: flex;
     border-top: medium solid @border-color;
     padding-left: 5em;
-    //font-size: 0.8em;
     color: darken(@border-color, 50%);
     min-height: 7%;
-    //font-size: 15px;
 }
 main {
     flex: 1 1 auto;
@@ -81,14 +77,12 @@ main {
         border: thin solid @border-color;
 
         &-filterName{
-            //font-size: 15px;
             background-color: @label-background;
             padding: 8px;
             border-bottom: thin solid @border-color;
         }
 
         &-form{
-            //font-size: 13px;
             padding: 15px;
             &-up{
                 display: flex;
@@ -123,7 +117,6 @@ main {
         }
     }
     &-field{
-        //font-size: 13px;
         display: flex;
         flex-direction: column;
     }
@@ -135,10 +128,6 @@ main {
         position: relative;
         gap: 10px;
         margin-top: 10px;
-
-        label{
-            //font-size: 13px;
-        }
     }
 
     &-posts{
@@ -171,10 +160,6 @@ main {
                 padding-bottom: 10px;
                 border-bottom: 2px solid @border-color;
                 width: 100%;
-
-                .pretitle{
-                    //font-size: 13px;
-                }
                 .post-title{
                     margin-top: 10px;
                     cursor: pointer;
@@ -223,7 +208,7 @@ main {
 .show-more-btn{
     border: none;
     background-color: white;
-    font-size: 15px;
+    //font-size: 15px;
     display: block;
     cursor: pointer;
     color: @blue;
@@ -231,7 +216,6 @@ main {
 }
 
 .post-btn {
-    //font-size: 12px;
     border: thin solid @border-color;
     cursor: pointer;
     display: inline-block;
@@ -290,7 +274,6 @@ input, select, .checkbox{
         background-color: white;
         color: @blue;
         cursor: pointer;
-        font-size: 16px;
 
         &:hover {
             background-color: #e7f3ff;
@@ -300,9 +283,7 @@ input, select, .checkbox{
             color: white;
             border-color: @blue;
         }
-        
     }
-
 }
 
 .count-post{
@@ -347,14 +328,15 @@ input, select, .checkbox{
     display: block;
 }
 
-
 .user-menu {
     &-email {
         color: black; 
         cursor: pointer; 
         display: inline-block; 
-        
         margin-right: 5px; 
+        &:hover{
+            color: @blue;
+        }
         &:hover .dropdown-content {
             display: block; 
             position: relative;
@@ -365,6 +347,7 @@ input, select, .checkbox{
 .dropdown-arrow {
     color: black; 
     cursor: pointer; 
+    font-size: 0.5em; 
     vertical-align: middle; 
 }
 #rightMenu {
