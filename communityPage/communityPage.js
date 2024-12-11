@@ -15,7 +15,6 @@ async function renderCommunity() {
     const communityId = localStorage.getItem('communityId');
     const community = await fetchCommunityId(communityId);
     const communityContainer = document.querySelector(".container-community");
-
     communityContainer.innerHTML = "";
 
     if (community) {
@@ -26,36 +25,87 @@ async function renderCommunity() {
             isAdmin = userRole === "Administrator";
         }
         
-        communityContainer.innerHTML = `
-             <div class="container-community-title">
-                <h1>Группа "${community.name}"</h1>
-                <div class="container-community-title-btn">
-                    ${isAdmin ? `<button class="create-btn" id="create-btn">Написать пост</button>` : ''}
-                    
-                    ${!isAdmin
-                        ? isUserSubscribed
-                            ? `<button class="sub-btn" id="unsub-btn">Отписаться</button>`
-                            : `<button class="sub-btn" id="sub-btn">Подписаться</button>`
-                        : ''}
-                </div>
-            </div>
-            <div class="count-subs">
-                <img src="../images/people.png" alt="people" id="people"> 
-                <label>${community.subscribersCount} подписчиков</label></div>
-            <div class="is-closed">Тип сообщества: ${community.isClosed ? "закрытое" : "открытое"}</div>
-            <div class="container-community-admins">
-                <h2>Администраторы</h2>
-                <div class="admins">
-                ${community.administrators.map(admin => `
-                     <div class="admin-item">
-                        <img src="../images/${admin.gender === "Male" ? "man1.png" : "women1.png"}" alt="${admin.gender}" class="admin-avatar"> 
-                        <h3 class="title">${admin.fullName}</h3>
-                   </div>
-                `).join('')}
-                </div>
-            </div>
-        </div>
-        `;
+        const communityTitle = document.createElement("div");
+        communityTitle.classList.add("container-community-title");
+
+        const communityName = document.createElement("h1");
+        communityName.textContent = `Группа "${community.name}"`;
+
+        const communityTitleBtn = document.createElement("div");
+        communityTitleBtn.classList.add('container-community-title-btn');
+
+        if (isAdmin) {
+            const createBtn = document.createElement("button");
+            createBtn.classList.add("create-btn");
+            createBtn.id = "create-btn";
+            createBtn.textContent = "Написать пост";
+
+            communityTitleBtn.appendChild(createBtn);
+        }
+        else{
+            if (isUserSubscribed) {
+                const subBtn = document.createElement('button');
+                subBtn.classList.add("sub-btn");
+                subBtn.id = "unsub-btn";
+                subBtn.textContent = "Отписаться";
+                communityTitleBtn.appendChild(subBtn);
+            }
+            else{
+                const subBtn = document.createElement('button');
+                subBtn.classList.add("sub-btn");
+                subBtn.id = "sub-btn";
+                subBtn.textContent = "Подписаться";
+                communityTitleBtn.appendChild(subBtn);
+            }   
+        }
+        communityTitle.appendChild(communityName);
+        communityTitle.appendChild(communityTitleBtn);
+
+        const countSubs = document.createElement("div");
+        countSubs.classList.add("count-subs");
+
+        const subsImg = document.createElement("img");
+        subsImg.src = "../images/people.png";
+        subsImg.alt = "people";
+        subsImg.id = "people";
+
+        const label = document.createElement("label");
+        label.textContent = `${community.subscribersCount} подписчиков`;
+
+        countSubs.appendChild(subsImg);
+        countSubs.appendChild(label);
+
+        const isClosed = document.createElement("div");
+        isClosed.classList.add("is-closed");
+        if (community.isClosed) {
+            isClosed.textContent = "Тип сообщества: закрытое";
+        }
+        else{
+            isClosed.textContent = "Тип сообщества: открытое";
+        }
+
+        const communityAdmins = document.createElement("div");
+        communityAdmins.classList.add("container-community-admins");
+        const h2 = document.createElement("h2");
+        h2.textContent = "Администраторы";
+
+        const admins = document.createElement("div");
+        admins.classList.add("admins");
+        admins.innerHTML = `${community.administrators.map(admin => `
+            <div class="admin-item">
+               <img src="../images/${admin.gender === "Male" ? "man1.png" : "women1.png"}" alt="${admin.gender}" class="admin-avatar"> 
+               <h3 class="title">${admin.fullName}</h3>
+          </div>
+       `).join('')}`;
+
+       communityAdmins.appendChild(h2);
+       communityAdmins.appendChild(admins);
+
+       communityContainer.appendChild(communityTitle);
+       communityContainer.appendChild(countSubs);
+       communityContainer.appendChild(isClosed);
+       communityContainer.appendChild(communityAdmins);
+
         if (isAdmin) {
             document.getElementById("create-btn").addEventListener("click", async (e) => {
                 if (token) {
@@ -67,7 +117,6 @@ async function renderCommunity() {
         communityContainer.innerHTML = "<p>Нет постов для отображения.</p>";
     }
 }
-
 
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -213,8 +262,6 @@ document.addEventListener("click", async (e) => {
         }
     }
 });
-
-
 
 document.addEventListener("click", async (e) => {
     localStorage.removeItem('postId');

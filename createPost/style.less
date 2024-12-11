@@ -156,15 +156,27 @@ main {
 
   .address-container {
     width: 100%;
-    max-width: 100%; 
-    //max-width: 800px; 
     margin: 0 auto;
     position: relative;
     box-sizing: border-box;
     margin-top: 15px;
+    
   }
+  .select2-container {
+    width: 100% !important; 
+}
 
+.select2-dropdown {
+    width: 100% !important;
+    position: absolute !important;
+    left: 0 !important; 
+    box-sizing: border-box; 
+}
 
+.address-container {
+    position: relative; 
+    width: 100%;
+}
 .address{
     margin-top: 15px;
     margin-right: auto;
@@ -181,7 +193,6 @@ textarea{
     border: thin solid darken(@border-color, 10%);
 }
 .select2{
-    //position: inherit;
     width: 100%;
 }
 

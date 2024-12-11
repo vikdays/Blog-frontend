@@ -19,14 +19,7 @@ export async function renderCommentsChain(commentId, container = null) {
         commentElement.classList.add("nested-comment");
 
         commentElement.innerHTML = `
-            <div class="pretitle">${comment.content ? comment.author : '[Комментарий удален]'}
-            ${comment.authorId === userId ? `
-                <button class="edit-comment-btn">
-                <img id="edit" class="edit" src="../images/pencil.png">
-                </button>
-                <button class="delete-comment-btn"><img id="delete" class="delete" src="../images/trash.png"></button>
-                ` : ''}
-            </div>
+            <div class="pretitle">${comment.content ? comment.author : '[Комментарий удален]'}</div>
             <div class="edit-form"></div>
             <div class="content">${comment.content ? comment.content : '[Комментарий удален]'}
                 <span class="modified-date">${comment.modifiedDate && comment.content ? "(изменен)" : ""}</span>
@@ -34,18 +27,30 @@ export async function renderCommentsChain(commentId, container = null) {
             <div class="pretitle">${comment.modifiedDate ? new Date(comment.modifiedDate).toLocaleString() : new Date(comment.createTime).toLocaleString()}
             </div>
         `;
-        if (comment.authorId === userId) {
-            const editButton = commentElement.querySelector('.edit-comment-btn');
+        if (!comment.deleteDate && comment.authorId === userId) {
+            const pretitle = commentElement.querySelector(".pretitle");
+            const editButton = document.createElement("button");
+            editButton.classList.add("edit-comment-btn");
+            editButton.innerHTML = `<img id="edit" class="edit" src="../images/pencil.png">`;
             editButton.addEventListener("click", () => editButtonClick(commentElement, comment.id));
-            const deleteButton = commentElement.querySelector('.delete-comment-btn');
+
+            const deleteButton = document.createElement("button");
+            deleteButton.classList.add("delete-comment-btn");
+            deleteButton.innerHTML = `<img id="delete" class="delete" src="../images/trash.png">`;
             deleteButton.addEventListener("click", () => deleteComment(commentElement, comment.id));
+
+            pretitle.appendChild(editButton);
+            pretitle.appendChild(deleteButton);
         }
+
         if (!comment.deleteDate) {
             const replyButton = document.createElement("button");
             replyButton.textContent = "Ответить";
             replyButton.classList.add("answer");
             replyButton.setAttribute("data-id", comment.id);
-            commentElement.querySelector(".pretitle:last-child").appendChild(replyButton);
+
+            const lastPretitle = commentElement.querySelector(".pretitle:last-child");
+            lastPretitle.appendChild(replyButton);
 
             replyButton.addEventListener("click", () => answerButtonClick(commentElement, comment.id));
         }

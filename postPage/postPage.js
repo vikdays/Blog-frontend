@@ -25,61 +25,135 @@ export async function fetchPost(postId, token = null) {
     return postData;
 }
 
-
 export async function renderPost(post) {
     const postsContainer = document.querySelector(".container-posts");
     postsContainer.innerHTML = "";
 
     if (post) {
-        console.log('post-desc', post)
+        console.log('post-desc', post);
+
         const postElement = document.createElement("div");
         postElement.classList.add("container-posts");
+
         if (post.addressId !== null) {
             var formattedAddress = await fetchAddress(post.addressId);
         }
-        postElement.innerHTML = `
-            <div class="container-posts-body">
-                <div class="upper">
-                    <div class="pretitle">${post.author} - ${new Date(post.createTime).toLocaleString()} в сообществе "${post.communityName ? post.communityName : "415"}"</div>
-                    <h2 class="post-title" data-id=${post.id}>${post.title}</h2> 
-                </div>
-                <div class="down">
-                    <div class="post-img">
-                        <img id="post-img" 
-                            src="${post.image ? post.image : " "}" 
-                        >
-                    </div>
-                    <div class="post-description">
-                        <div class="short-description">${post.description}</div>
-                    </div>
-                    <div class="post-tags">#${post.tags.map(tag => tag.name).join(" #")}</div>
-                    <div class="post-time">Время чтения: ${post.readingTime} мин.</div>
-                    <div class="post-geo">
-                        ${formattedAddress ? `<img src="../images/geo.png" alt="geo" id="geo">` : ""}
-                        <div>${formattedAddress ? formattedAddress : ""}</div>
-                    </div>
-                </div>
-            </div>
-            <div class="container-posts-footer">
-                <div class="container-posts-comment" id="comments-section">
-                    <div id="comments-count">${post.commentsCount}</div>
-                    <img src="../images/comment.png" alt="comment" id="comment" data-id=${post.id}>
-                </div>
-                <div class="container-posts-likes">
-                    <div id="likes-count">${post.likes}</div>
-                        <button class="image-button" data-id=${post.id} data-community-id=${post.communityId}>
-                        <img id="like" class="like-img"
-                            src="${post.hasLike ? "../images/love.png" : "../images/heart.png"}" 
-                            alt="${post.hasLike ? "love" : "heart"}" 
-                        >
-                    </button>
-                </div>
-            </div>
-        `;
+
+        const bodyContainer = document.createElement("div");
+        bodyContainer.classList.add("container-posts-body");
+
+        const upperDiv = document.createElement("div");
+        upperDiv.classList.add("upper");
+
+        const pretitle = document.createElement("div");
+        pretitle.classList.add("pretitle");
+        pretitle.textContent = `${post.author} - ${new Date(post.createTime).toLocaleString()} в сообществе "${post.communityName ? post.communityName : "415"}"`;
+
+        const title = document.createElement("h2");
+        title.classList.add("post-title");
+        title.dataset.id = post.id;
+        title.textContent = post.title;
+
+        upperDiv.append(pretitle, title);
+
+        const downDiv = document.createElement("div");
+        downDiv.classList.add("down");
+
+        const imgContainer = document.createElement("div");
+        imgContainer.classList.add("post-img");
+
+        const postImg = document.createElement("img");
+        postImg.id = "post-img";
+        postImg.src = post.image ? post.image : " ";
+        imgContainer.appendChild(postImg);
+
+        const descriptionContainer = document.createElement("div");
+        descriptionContainer.classList.add("post-description");
+
+        const shortDescription = document.createElement("div");
+        shortDescription.classList.add("short-description");
+        shortDescription.textContent = post.description;
+
+        descriptionContainer.appendChild(shortDescription);
+
+        const tags = document.createElement("div");
+        tags.classList.add("post-tags");
+        tags.textContent = `#${post.tags.map(tag => tag.name).join(" #")}`;
+
+        const readingTime = document.createElement("div");
+        readingTime.classList.add("post-time");
+        readingTime.textContent = `Время чтения: ${post.readingTime} мин.`;
+
+        const geoDiv = document.createElement("div");
+        geoDiv.classList.add("post-geo");
+
+        if (formattedAddress) {
+            const geoImg = document.createElement("img");
+            geoImg.src = "../images/geo.png";
+            geoImg.alt = "geo";
+            geoImg.id = "geo";
+            geoDiv.appendChild(geoImg);
+        }
+
+        if (formattedAddress) {
+            const addressText = document.createElement("div");
+            addressText.textContent = formattedAddress;
+            geoDiv.appendChild(addressText);
+        }
+
+        downDiv.append(imgContainer, descriptionContainer, tags, readingTime, geoDiv);
+
+        bodyContainer.append(upperDiv, downDiv);
+
+        const footerContainer = document.createElement("div");
+        footerContainer.classList.add("container-posts-footer");
+
+        const commentsContainer = document.createElement("div");
+        commentsContainer.classList.add("container-posts-comment");
+        commentsContainer.id = "comments-section";
+
+        const commentsCount = document.createElement("div");
+        commentsCount.id = "comments-count";
+        commentsCount.textContent = post.commentsCount;
+
+        const commentImg = document.createElement("img");
+        commentImg.src = "../images/comment.png";
+        commentImg.alt = "comment";
+        commentImg.id = "comment";
+        commentImg.dataset.id = post.id;
+
+        commentsContainer.append(commentsCount, commentImg);
+
+        const likesContainer = document.createElement("div");
+        likesContainer.classList.add("container-posts-likes");
+
+        const likesCount = document.createElement("div");
+        likesCount.id = "likes-count";
+        likesCount.textContent = post.likes;
+
+        const likeButton = document.createElement("button");
+        likeButton.classList.add("image-button");
+        likeButton.dataset.id = post.id;
+        likeButton.dataset.communityId = post.communityId;
+
+        const likeImg = document.createElement("img");
+        likeImg.id = "like";
+        likeImg.classList.add("like-img");
+        likeImg.src = post.hasLike ? "../images/love.png" : "../images/heart.png";
+        likeImg.alt = post.hasLike ? "love" : "heart";
+
+        likeButton.appendChild(likeImg);
+        likesContainer.append(likesCount, likeButton);
+
+        footerContainer.append(commentsContainer, likesContainer);
+
+        postElement.append(bodyContainer, footerContainer);
         postsContainer.appendChild(postElement);
-        
+
     } else {
-        postsContainer.innerHTML = "<p>Нет постов для отображения.</p>";
+        const noPostsMessage = document.createElement("p");
+        noPostsMessage.textContent = "Нет постов для отображения.";
+        postsContainer.appendChild(noPostsMessage);
     }
 }
 
@@ -98,11 +172,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 commentsSection.scrollIntoView({behavior: "smooth"});
             }
         }
-        
     } catch (error) {
         console.error("Ошибка при загрузке постов:", error.message);
     }
-
 });
 
 document.addEventListener("click", async (event) => {

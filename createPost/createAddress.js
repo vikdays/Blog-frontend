@@ -1,8 +1,9 @@
-let parentObjectId = null; 
+let parentObjectId = null;  
 let fieldCount = 0; 
 
 const apiUrl = 'https://blog.kreosoft.space/api/address/search'; 
 const container = document.querySelector('.address-container'); 
+
 function initializeSelect2($element, placeholder) {
     $element.select2({
         placeholder: placeholder, 
@@ -29,8 +30,10 @@ function initializeSelect2($element, placeholder) {
             },
             cache: true
         },
-        minimumInputLength: 1 
-    }).on('select2:select', function (e) {
+        minimumInputLength: 1,
+        allowClear: true
+    })
+    .on('select2:select', function (e) {
         const data = e.params.data; 
         parentObjectId = data.id; 
         updateLabel(fieldCount, data.objectLevelText);
@@ -40,10 +43,35 @@ function initializeSelect2($element, placeholder) {
         }
         fieldCount++;
         addNewSelectField('Следующий элемент адреса');
+    })
+    .on('select2:clear', function () {
+        const currentFieldIndex = parseInt($element.attr('id').split('-')[1], 10);
+        removeSubsequentFields(currentFieldIndex);
+        parentObjectId = currentFieldIndex > 0 ? getParentIdFromPreviousField(currentFieldIndex - 1) : null;
     });
 }
 
-export function getAddressId(){
+function getParentIdFromPreviousField(index) {
+    const previousField = document.querySelector(`.field-${index}`);
+    if (!previousField) return null;
+
+    const select = previousField.querySelector('select');
+    const selectedOption = $(select).select2('data');
+    if (selectedOption.length > 0) {
+        return selectedOption[0].id; 
+    }
+    return null;
+}
+
+function removeSubsequentFields(fromIndex) {
+    for (let i = fromIndex + 1; i <= fieldCount; i++) {
+        const sibling = document.querySelector(`.field-${i}`);
+        if (sibling) sibling.remove();
+    }
+    fieldCount = fromIndex;
+}
+
+export function getAddressId() {
     const lastField = document.querySelector(`.field-${fieldCount}`);
     if (!lastField) return null;
 
@@ -83,6 +111,7 @@ function updateLabel(fieldIndex, newLabelText) {
         }
     }
 }
+
 $(document).ready(function () {
     parentObjectId = null;
     addNewSelectField('Субъект РФ');

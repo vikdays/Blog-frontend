@@ -140,8 +140,8 @@ async function handleUpdateProfile(event) {
             }   
         } 
         else {
-
-            localStorage.setItem('userEmail', response.email);
+            userEmail.textContent = profileData.email;
+            localStorage.setItem('userEmail', profileData.email);
             showSuccess("Профиль успешно обновлен!" );
         }
     } 

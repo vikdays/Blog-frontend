@@ -6,15 +6,20 @@ async function renderFormContent() {
     const communities = await fetchCommunities();
     const myCommunities = await fetchUserCommunities(token);
     const formContainer = document.querySelector(".form");
-    formContainer.innerHTML = ""; 
+    formContainer.innerHTML = "";
 
     if (communities && communities.length > 0) {
         communities.forEach(async (community) => {
             const communityElement = document.createElement("div");
             communityElement.classList.add("community");
-            communityElement.innerHTML = `
-                <a><h2 class="title" data-id=${community.id}>${(community.name).replace(/['"]+/g, '')} </h2></a>
-            `;
+
+            const a = document.createElement("a");
+            const title = document.createElement("h2");
+            title.classList.add("title");
+            title.dataset.id = community.id;
+            title.textContent = (community.name).replace(/['"]+/g, '');
+            a.appendChild(title);
+            communityElement.appendChild(a);
 
             formContainer.appendChild(communityElement);
 
@@ -44,7 +49,7 @@ async function renderFormContent() {
                             event.preventDefault();
                             const success = await unsubscribeCommunity(community.id, token);
                             if (success) {
-                                renderFormContent(); 
+                                renderFormContent();
                             }
                         });
                     }
@@ -54,7 +59,9 @@ async function renderFormContent() {
             }
         });
     } else {
-        formContainer.innerHTML = "<p>Нет групп для отображения.</p>";
+        const noPostsMessage = document.createElement("p");
+        noPostsMessage.textContent = "Нет групп для отображения.";
+        formContainer.appendChild(noPostsMessage);
     }
 }
 

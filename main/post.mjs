@@ -33,68 +33,153 @@ export async function fetchPosts(filters = {}, token = null) {
         return { posts: [], pagination: { size: 0, count: 0, current: 1 } };
     }
 }
+
 export function renderPosts(posts) {
     const postsContainer = document.querySelector(".container-posts");
     if (!postsContainer) {
         console.error("Элемент .container-posts не найден");
         return;
     }
-    postsContainer.innerHTML = "";
+    postsContainer.innerHTML = ""; 
 
     if (posts && posts.length > 0) {
         posts.forEach(post => {
             console.log("Post data:", post);
-            const postElement = document.createElement("div");
+
             const maxLengthPost = 500;
             const isLong = post.description.length > maxLengthPost;
             const shortPost = post.description.slice(0, maxLengthPost);
+
+            const postElement = document.createElement("div");
             postElement.classList.add("container-posts");
 
-            postElement.innerHTML = `
-                <div class="container-posts-body">
-                    <div class="upper">
-                        <div class="pretitle">${post.author} - ${new Date(post.createTime).toLocaleString()} в сообществе "${post.communityName ? post.communityName : "415"}"</div>
-                        <a> <h2 class="post-title" data-id=${post.id} data-community-id=${post.communityId}>${post.title}</h2> </a>
-                    </div>
-                    <div class="down">
-                        <div class="post-img">
-                         <img id="post-img" 
-                                src="${post.image ? post.image : " "}" 
-                            >
-                        </div>
-                        <div class="post-description">
-                        <span class="short-description">${isLong ? shortPost + "..." : post.description}</span>
-                        ${isLong ? `
-                            <button class="show-more-btn">Показать полностью</button>
-                            <span class="full-description" style="display: none;">${post.description}</span>
-                        ` : ""}
-                        </div>
-                        <div class="post-tags">#${post.tags.map(tag => tag.name).join(" #")}</div>
-                        <div class="post-time">Время чтения: ${post.readingTime} мин.</div>
-                    </div>
-                </div>
-                <div class="container-posts-footer">
-                    <div class="container-posts-comment">
-                        <div id="comments-count">${post.commentsCount}</div>
-                        <img src="../images/comment.png" alt="comment" id="comment" class="comment" data-community-id=${post.communityId} data-id=${post.id}>
-                    </div>
-                    <div class="container-posts-likes">
-                        <div id="likes-count">${post.likes}</div>
-                         <button class="image-button" data-id=${post.id} data-community-id=${post.communityId}>
-                            <img id="like" class="like-img"
-                                src="${post.hasLike ? "../images/love.png" : "../images/heart.png"}" 
-                                alt="${post.hasLike ? "love" : "heart"}" 
-                            >
-                        </button>
-                    </div>
-                </div>
-            `;
+            const upperDiv = document.createElement("div");
+            upperDiv.classList.add("upper");
+
+            const pretitleDiv = document.createElement("div");
+            pretitleDiv.classList.add("pretitle");
+            pretitleDiv.textContent = `${post.author} - ${new Date(post.createTime).toLocaleString()} в сообществе "${post.communityName || "415"}"`;
+
+            const titleLink = document.createElement("a");
+            const titleHeading = document.createElement("h2");
+            titleHeading.classList.add("post-title");
+            titleHeading.dataset.id = post.id;
+            titleHeading.dataset.communityId = post.communityId;
+            titleHeading.textContent = post.title;
+            titleLink.appendChild(titleHeading);
+
+            upperDiv.appendChild(pretitleDiv);
+            upperDiv.appendChild(titleLink);
+
+            const downDiv = document.createElement("div");
+            downDiv.classList.add("down");
+
+            const postImgDiv = document.createElement("div");
+            postImgDiv.classList.add("post-img");
+            const postImg = document.createElement("img");
+            postImg.id = "post-img";
+            postImg.src = post.image || " ";
+            postImgDiv.appendChild(postImg);
+
+            const postDescriptionDiv = document.createElement("div");
+            postDescriptionDiv.classList.add("post-description");
+
+            const shortDescriptionSpan = document.createElement("span");
+            shortDescriptionSpan.classList.add("short-description");
+            shortDescriptionSpan.textContent = isLong ? shortPost + "..." : post.description;
+
+            postDescriptionDiv.appendChild(shortDescriptionSpan);
+
+            if (isLong) {
+                const showMoreButton = document.createElement("button");
+                showMoreButton.classList.add("show-more-btn");
+                showMoreButton.textContent = "Показать полностью";
+
+                const fullDescriptionSpan = document.createElement("span");
+                fullDescriptionSpan.classList.add("full-description");
+                fullDescriptionSpan.style.display = "none";
+                fullDescriptionSpan.textContent = post.description;
+
+                postDescriptionDiv.appendChild(showMoreButton);
+                postDescriptionDiv.appendChild(fullDescriptionSpan);
+            }
+
+            const postTagsDiv = document.createElement("div");
+            postTagsDiv.classList.add("post-tags");
+            postTagsDiv.textContent = `#${post.tags.map(tag => tag.name).join(" #")}`;
+
+            const postTimeDiv = document.createElement("div");
+            postTimeDiv.classList.add("post-time");
+            postTimeDiv.textContent = `Время чтения: ${post.readingTime} мин.`;
+
+            downDiv.appendChild(postImgDiv);
+            downDiv.appendChild(postDescriptionDiv);
+            downDiv.appendChild(postTagsDiv);
+            downDiv.appendChild(postTimeDiv);
+
+            const footerDiv = document.createElement("div");
+            footerDiv.classList.add("container-posts-footer");
+
+            const commentsDiv = document.createElement("div");
+            commentsDiv.classList.add("container-posts-comment");
+
+            const commentsCountDiv = document.createElement("div");
+            commentsCountDiv.id = "comments-count";
+            commentsCountDiv.textContent = post.commentsCount;
+
+            const commentImg = document.createElement("img");
+            commentImg.src = "../images/comment.png";
+            commentImg.alt = "comment";
+            commentImg.id = "comment";
+            commentImg.classList.add("comment");
+            commentImg.dataset.communityId = post.communityId;
+            commentImg.dataset.id = post.id;
+
+            commentsDiv.appendChild(commentsCountDiv);
+            commentsDiv.appendChild(commentImg);
+
+            const likesDiv = document.createElement("div");
+            likesDiv.classList.add("container-posts-likes");
+
+            const likesCountDiv = document.createElement("div");
+            likesCountDiv.id = "likes-count";
+            likesCountDiv.textContent = post.likes;
+
+            const likeButton = document.createElement("button");
+            likeButton.classList.add("image-button");
+            likeButton.dataset.id = post.id;
+            likeButton.dataset.communityId = post.communityId;
+
+            const likeImg = document.createElement("img");
+            likeImg.id = "like";
+            likeImg.classList.add("like-img");
+            likeImg.src = post.hasLike ? "../images/love.png" : "../images/heart.png";
+            likeImg.alt = post.hasLike ? "love" : "heart";
+
+            likeButton.appendChild(likeImg);
+            likesDiv.appendChild(likesCountDiv);
+            likesDiv.appendChild(likeButton);
+
+            footerDiv.appendChild(commentsDiv);
+            footerDiv.appendChild(likesDiv);
+
+            const bodyDiv = document.createElement("div");
+            bodyDiv.classList.add("container-posts-body");
+            bodyDiv.appendChild(upperDiv);
+            bodyDiv.appendChild(downDiv);
+
+            postElement.appendChild(bodyDiv);
+            postElement.appendChild(footerDiv);
+
             postsContainer.appendChild(postElement);
         });
     } else {
-        postsContainer.innerHTML = "<p>Нет постов для отображения.</p>";
+        const noPostsMessage = document.createElement("p");
+        noPostsMessage.textContent = "Нет постов для отображения.";
+        postsContainer.appendChild(noPostsMessage);
     }
 }
+
 
 export async function likePost(postId, token) {
     console.log("Токен:", token); 

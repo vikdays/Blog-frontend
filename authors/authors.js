@@ -1,43 +1,4 @@
-
-
-const email = localStorage.getItem('userEmail');
-const userEmail = document.getElementById('user-email');
-const dropdownMenu = document.getElementById('dropdownMenu');
-const dropdownArrow = document.getElementById('dropdownArrow');
-
-document.getElementById("logout").addEventListener("click", async (event) => {
-    const response = await fetch('https://blog.kreosoft.space/api/account/logout', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        }
-    })
-    localStorage.clear();
-    window.location.href = '../authorization/authorization.html'; 
-})
-
-document.getElementById("profile").addEventListener("click", async (event) => {
-    window.location.href = '../profile/profile.html'; 
-})
-
-
-if (userEmail) {
-    userEmail.textContent = email || 'Вход';
-} else {
-    console.error('email not found in localStorage');
-
-}
-if (userEmail.textContent === email) {
-    userEmail.addEventListener('click', () => {
-        dropdownMenu.classList.toggle('visible');
-    });
-}
-else{
-    dropdownArrow.style.display = "none";
-    userEmail.addEventListener('click', () => {
-        window.location.href = '../authorization/authorization.html'; 
-    });
-}
+import '../profile/dropdownMenu.mjs';
 
 export async function fetchAuthors() {
     try {
@@ -70,27 +31,69 @@ async function renderAuthors() {
             authorElement.classList.add("container-authors-card");
             const topIndex = topAuthors.indexOf(author);
             let crownImage = "";
+
+            const leftDiv = document.createElement("div");
+            leftDiv.classList.add("container-authors-card-left");
+
+            const avatarImg = document.createElement("img");
+            avatarImg.classList.add("admin-avatar");
+            avatarImg.src = (author.gender === "Male" ? "../images/man1.png" : "../images/women1.png");
+            avatarImg.alt = author.gender;
+
+            const leftDesc = document.createElement("div");
+            leftDesc.classList.add("container-authors-card-left-desc");
+
+            const leftDescUp = document.createElement("div");
+            leftDescUp.classList.add("container-authors-card-left-desc-up");
+
+            const name = document.createElement("h3");
+            name.classList.add("name");
+            name.textContent = author.fullName;
+
+            const b = document.createElement("b");
+            const createText = document.createElement("i");
+            createText.classList.add("create-text");
+            createText.textContent = `Создан: ${new Date(author.created).toLocaleDateString('ru-RU')}`;
+
+            b.appendChild(createText);
+
+            leftDescUp.appendChild(name);
+            leftDescUp.appendChild(b);
+
+            const leftDescDown = document.createElement("div");
+            leftDescDown.classList.add("container-authors-card-left-desc-down");
+
+            if (author.birthDate) {
+                const birth = document.createElement("b");
+                birth.classList.add("create-text");
+                birth.textContent = "Дата рождения: ";
+                const date = document.createElement("div");
+                date.textContent = new Date(author.birthDate).toLocaleDateString('ru-RU');
+                leftDescDown.appendChild(birth);
+                leftDescDown.appendChild(date);
+            }
+
+            leftDesc.appendChild(leftDescUp);
+            leftDesc.appendChild(leftDescDown);
+
+            leftDiv.appendChild(avatarImg);
+            leftDiv.appendChild(leftDesc);
+
+            const rightDiv = document.createElement("div");
+            rightDiv.classList.add("container-authors-card-right");
+
+            const posts = document.createElement("div");
+            posts.classList.add("container-authors-card-right-inf");
+            posts.textContent = `Постов: ${author.posts}`;
+            const likes = document.createElement("div");
+            likes.classList.add("container-authors-card-right-inf");
+            likes.textContent = `Лайков: ${author.likes}`;
+
+            rightDiv.appendChild(posts);
+            rightDiv.appendChild(likes);
             
-            authorElement.innerHTML = `
-                <div class="container-authors-card-left">
-                    <img class="admin-avatar" src="../images/${author.gender === "Male" ? "man1.png" : "women1.png"}" alt="${author.gender}" class="admin-avatar">
-                    <div class="container-authors-card-left-desc">
-                        <div class="container-authors-card-left-desc-up">
-                            <h3> <spanclass="name">${author.fullName}</span></h3>
-                            <b ><i class="create-text">Создан: ${new Date(author.created).toLocaleDateString('ru-RU')}</i></b>
-                        </div>
-                        <div class="container-authors-card-left-desc-down">
-                            ${author.birthDate ? 
-                            `<b class="create-text">Дата рождения: </b>
-                            <div>${new Date(author.birthDate).toLocaleDateString('ru-RU')}</div>` : ''}
-                        </div>
-                    </div>
-                </div>
-                <div class="container-authors-card-right">
-                    <div class="container-authors-card-right-inf">Постов: ${author.posts}</div>
-                    <div class="container-authors-card-right-inf">Лайков: ${author.likes}</div>
-                </div>
-            `;
+            authorElement.appendChild(leftDiv);
+            authorElement.appendChild(rightDiv);
 
             authorsContainer.appendChild(authorElement); 
             const authorCardLeft = authorElement.querySelector(".container-authors-card-left");
@@ -119,7 +122,9 @@ async function renderAuthors() {
             });
         });
     } else {
-        authorsContainer.innerHTML = "<p>Нет авторов для отображения.</p>";
+        const noPostsMessage = document.createElement("p");
+        noPostsMessage.textContent = "Нет постов для отображения.";
+        authorsContainer.appendChild(noPostsMessage);
     }
 }
 

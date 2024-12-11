@@ -4,12 +4,12 @@ import {deleteComment} from './deleteComment.mjs';
 const userId = localStorage.getItem('userId');
 export async function renderComments(post) {
     const commentsContainer = document.querySelector(".container-comments");
-    
+
     if (!post.comments || post.comments.length === 0) {
         if (commentsContainer) {
             commentsContainer.innerHTML = `<h2 class="container-comments-title">Комментарии</h2><p>Прокомментируйте первым!</p>`;
         }
-        return; 
+        return;
     }
 
     const commentsBox = document.querySelector(".container-comments-box");
@@ -20,10 +20,12 @@ export async function renderComments(post) {
     post.comments.forEach(comment => {
         const commentElement = document.createElement("div");
         commentElement.classList.add("container-comments-box");
-    
+
+        const isDeleted = !comment.content;
+
         commentElement.innerHTML = `
-            <div class="pretitle">${comment.content ? comment.author : '[Комментарий удален]'}
-            ${comment.authorId === userId ? `
+            <div class="pretitle">${isDeleted ? '[Комментарий удален]' : comment.author}
+            ${!isDeleted && comment.authorId === userId ? `
                 <button class="edit-comment-btn">
                 <img id="edit" class="edit" src="../images/pencil.png">
                 </button>
@@ -31,19 +33,22 @@ export async function renderComments(post) {
                 ` : ''}
             </div>
             <div class="edit-form"></div>
-            <div class="content">${comment.content ? comment.content : '[Комментарий удален]'}
-                <span class="modified-date">${comment.modifiedDate && comment.conten ? "(изменен)" : ""}</span>
+            <div class="content">${isDeleted ? '[Комментарий удален]' : comment.content}
+                <span class="modified-date">${comment.modifiedDate && comment.content ? "(изменен)" : ""}</span>
             </div>
             <div class="pretitle">${comment.modifiedDate ? new Date(comment.modifiedDate).toLocaleString() : new Date(comment.createTime).toLocaleString()}
             </div>
         `;
-        if (comment.authorId === userId) {
+
+        if (!isDeleted && comment.authorId === userId) {
             const editButton = commentElement.querySelector('.edit-comment-btn');
-            editButton.addEventListener("click", () => editButtonClick(commentElement, comment.id));
+            editButton?.addEventListener("click", () => editButtonClick(commentElement, comment.id));
+
             const deleteButton = commentElement.querySelector('.delete-comment-btn');
-            deleteButton.addEventListener("click", () => deleteComment(commentElement, comment.id));
+            deleteButton?.addEventListener("click", () => deleteComment(commentElement, comment.id));
         }
-        if (!comment.deleteDate) {
+
+        if (!comment.deleteDate && !isDeleted) {
             const replyButton = document.createElement("button");
             replyButton.textContent = "Ответить";
             replyButton.classList.add("answer");
@@ -60,10 +65,10 @@ export async function renderComments(post) {
             expandButton.setAttribute("data-id", comment.id);
             commentElement.appendChild(expandButton);
         }
+
         commentsBox.appendChild(commentElement);
     });
 }
-
 
 export async function postComment(data, postId, token) {
     try {
