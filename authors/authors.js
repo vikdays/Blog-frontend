@@ -1,4 +1,5 @@
 import '../profile/dropdownMenu.mjs';
+import '../profile/getProfile.js';
 
 export async function fetchAuthors() {
     try {

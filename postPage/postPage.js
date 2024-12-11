@@ -5,6 +5,7 @@ import { fetchAddress} from './address.mjs';
 import { likePost, dislikePost } from '../main/post.mjs';
 import { renderComments, postComment } from './comments.mjs';
 import { renderCommentsChain } from './commentsChain.mjs';
+import '../profile/getProfile.js';
 
 export async function fetchPost(postId, token = null) {
     console.log(postId, token);

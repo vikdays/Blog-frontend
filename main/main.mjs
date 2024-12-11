@@ -5,6 +5,7 @@ import { dislikePost } from './post.mjs';
 import { createPagination} from './pagination.mjs';
 import { canUserLike} from './communities.mjs';
 import '../profile/dropdownMenu.mjs';
+import '../profile/getProfile.js';
 
 const token = localStorage.getItem('token');
 
@@ -113,7 +114,7 @@ document.addEventListener("click", async (event) => {
     console.log(communityId)
 
 
-    if (!communityId) { //!
+    if (!communityId) {
         const canLike = await canUserLike(communityId, token);
         if (!canLike) {
             alert("Вы должны быть подписчиком или администратором, чтобы оценить этот пост.");

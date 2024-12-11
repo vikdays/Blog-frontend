@@ -9,6 +9,7 @@ export async function renderCommentsChain(commentId, container = null) {
     }
 
     const nestedComments = await getCommentChain(commentId);
+
     if (!nestedComments || nestedComments.length === 0) {
         console.log(`Для комментария ${commentId} нет вложенных комментариев.`);
         return container;
@@ -18,25 +19,51 @@ export async function renderCommentsChain(commentId, container = null) {
         const commentElement = document.createElement("div");
         commentElement.classList.add("nested-comment");
 
-        commentElement.innerHTML = `
-            <div class="pretitle">${comment.content ? comment.author : '[Комментарий удален]'}</div>
-            <div class="edit-form"></div>
-            <div class="content">${comment.content ? comment.content : '[Комментарий удален]'}
-                <span class="modified-date">${comment.modifiedDate && comment.content ? "(изменен)" : ""}</span>
-            </div>
-            <div class="pretitle">${comment.modifiedDate ? new Date(comment.modifiedDate).toLocaleString() : new Date(comment.createTime).toLocaleString()}
-            </div>
-        `;
+        const pretitle = document.createElement("div");
+        pretitle.classList.add("pretitle");
+        pretitle.textContent = comment.content ? comment.author : '[Комментарий удален]';
+
+        const editForm = document.createElement("div");
+        editForm.classList.add("edit-form");
+
+        const content = document.createElement("div");
+        content.classList.add("content");
+        content.textContent = comment.content ? comment.content : '[Комментарий удален]';
+
+        if (comment.modifiedDate && comment.content) {
+            const modifiedDate = document.createElement("span");
+            modifiedDate.classList.add("modified-date");
+            modifiedDate.textContent = " (изменен)";
+            content.appendChild(modifiedDate);
+        }
+
+        const datePretitle = document.createElement("div");
+        datePretitle.classList.add("pretitle");
+        datePretitle.textContent = comment.modifiedDate
+            ? new Date(comment.modifiedDate).toLocaleString()
+            : new Date(comment.createTime).toLocaleString();
+
         if (!comment.deleteDate && comment.authorId === userId) {
-            const pretitle = commentElement.querySelector(".pretitle");
             const editButton = document.createElement("button");
             editButton.classList.add("edit-comment-btn");
-            editButton.innerHTML = `<img id="edit" class="edit" src="../images/pencil.png">`;
+
+            const editIcon = document.createElement("img");
+            editIcon.id = "edit";
+            editIcon.classList.add("edit");
+            editIcon.src = "../images/pencil.png";
+
+            editButton.appendChild(editIcon);
             editButton.addEventListener("click", () => editButtonClick(commentElement, comment.id));
 
             const deleteButton = document.createElement("button");
             deleteButton.classList.add("delete-comment-btn");
-            deleteButton.innerHTML = `<img id="delete" class="delete" src="../images/trash.png">`;
+
+            const deleteIcon = document.createElement("img");
+            deleteIcon.id = "delete";
+            deleteIcon.classList.add("delete");
+            deleteIcon.src = "../images/trash.png";
+
+            deleteButton.appendChild(deleteIcon);
             deleteButton.addEventListener("click", () => deleteComment(commentElement, comment.id));
 
             pretitle.appendChild(editButton);
@@ -49,11 +76,14 @@ export async function renderCommentsChain(commentId, container = null) {
             replyButton.classList.add("answer");
             replyButton.setAttribute("data-id", comment.id);
 
-            const lastPretitle = commentElement.querySelector(".pretitle:last-child");
-            lastPretitle.appendChild(replyButton);
-
             replyButton.addEventListener("click", () => answerButtonClick(commentElement, comment.id));
+            datePretitle.appendChild(replyButton);
         }
+
+        commentElement.appendChild(pretitle);
+        commentElement.appendChild(editForm);
+        commentElement.appendChild(content);
+        commentElement.appendChild(datePretitle);
 
         container.appendChild(commentElement);
     });

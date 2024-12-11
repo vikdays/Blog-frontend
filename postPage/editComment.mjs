@@ -1,25 +1,37 @@
 export function editButtonClick(commentElement, commentId) {
     const editForm = commentElement.querySelector(".edit-form");
-    const currentContentElement = commentElement.querySelector(".content");
-    let currentContent = currentContentElement.textContent.trim();
+    const contentElement = commentElement.querySelector(".content");
+
+    if (editForm.hasChildNodes()) {
+        editForm.innerHTML = '';
+        contentElement.style.display = 'block';
+        return;
+    }
+
+    let currentContent = contentElement.textContent.trim();
     currentContent = currentContent.replace("(изменен)", "").trim();
-    editForm.innerHTML = `
-        <input type='text' class="answer-input" value="${currentContent}"></input>
-        <button class = "edit">Редактировать</button>
-    `;
-    
-    const content = commentElement.querySelector('.content');
-    content.style.display = 'none';
+
+    const input = document.createElement("input");
+    input.classList.add('answer-input');
+    input.value = currentContent;
+    const btn = document.createElement("button");
+    btn.classList.add("edit");
+    btn.textContent = "Сохранить";
+
+    editForm.appendChild(input);
+    editForm.appendChild(btn);
+    contentElement.style.display = 'none';
 
     const editButton = editForm.querySelector(".edit");
     const editInput = editForm.querySelector(".answer-input");
+
     editButton.addEventListener("click", async () => {
-        const content = editInput.value.trim();
+        const updatedContent = editInput.value.trim();
         const token = localStorage.getItem("token");
         try {
-            await editComment(commentId, token, content);
+            await editComment(commentId, token, updatedContent);
             editForm.innerHTML = ''; 
-            window.location.reload();
+            window.location.reload(); 
         } catch (error) {
             console.error("Ошибка при отправке комментария:", error.message);
         }

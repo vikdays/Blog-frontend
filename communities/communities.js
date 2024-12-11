@@ -1,5 +1,6 @@
 import { fetchCommunities, fetchUserCommunities } from '../main/communities.mjs';
 import '../profile/dropdownMenu.mjs';
+import '../profile/getProfile.js';
 const token = localStorage.getItem('token');
 
 async function renderFormContent() {

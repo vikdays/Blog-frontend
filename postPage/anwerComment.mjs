@@ -10,11 +10,17 @@ export function answerButtonClick(commentElement, parentId) {
     const answerForm = document.createElement("div");
     answerForm.classList.add("answer-form");
 
-    answerForm.innerHTML = `
-        <input type='text' class="answer-input" placeholder="Оставьте комментарий..."></input>
-        <button class = "send">Отправить</button>
-    `;
-    
+    const answer = document.createElement('input');
+    answer.classList.add("answer-input");
+    answer.type = 'text';
+    answer.placeholder = "Оставьте комментарий...";
+
+    const send = document.createElement("button");
+    send.classList.add('send');
+    send.textContent = "Отправить";
+
+    answerForm.appendChild(answer);
+    answerForm.appendChild(send);
     commentElement.appendChild(answerForm);
 
     const sendButton = answerForm.querySelector(".send");

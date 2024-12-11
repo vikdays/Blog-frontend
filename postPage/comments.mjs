@@ -2,12 +2,22 @@ import { answerButtonClick } from './anwerComment.mjs';
 import { editButtonClick } from './editComment.mjs';
 import {deleteComment} from './deleteComment.mjs';
 const userId = localStorage.getItem('userId');
+
 export async function renderComments(post) {
     const commentsContainer = document.querySelector(".container-comments");
 
     if (!post.comments || post.comments.length === 0) {
         if (commentsContainer) {
-            commentsContainer.innerHTML = `<h2 class="container-comments-title">Комментарии</h2><p>Прокомментируйте первым!</p>`;
+            const title = document.createElement('h2');
+            title.classList.add('container-comments-title');
+            title.textContent = 'Комментарии';
+
+            const message = document.createElement('p');
+            message.textContent = 'Прокомментируйте первым!';
+
+            commentsContainer.innerHTML = '';
+            commentsContainer.appendChild(title);
+            commentsContainer.appendChild(message);
         }
         return;
     }
@@ -23,46 +33,78 @@ export async function renderComments(post) {
 
         const isDeleted = !comment.content;
 
-        commentElement.innerHTML = `
-            <div class="pretitle">${isDeleted ? '[Комментарий удален]' : comment.author}
-            ${!isDeleted && comment.authorId === userId ? `
-                <button class="edit-comment-btn">
-                <img id="edit" class="edit" src="../images/pencil.png">
-                </button>
-                <button class="delete-comment-btn"><img id="delete" class="delete" src="../images/trash.png"></button>
-                ` : ''}
-            </div>
-            <div class="edit-form"></div>
-            <div class="content">${isDeleted ? '[Комментарий удален]' : comment.content}
-                <span class="modified-date">${comment.modifiedDate && comment.content ? "(изменен)" : ""}</span>
-            </div>
-            <div class="pretitle">${comment.modifiedDate ? new Date(comment.modifiedDate).toLocaleString() : new Date(comment.createTime).toLocaleString()}
-            </div>
-        `;
+        const pretitle = document.createElement('div');
+        pretitle.classList.add('pretitle');
+        pretitle.textContent = isDeleted ? '[Комментарий удален]' : comment.author;
 
         if (!isDeleted && comment.authorId === userId) {
-            const editButton = commentElement.querySelector('.edit-comment-btn');
-            editButton?.addEventListener("click", () => editButtonClick(commentElement, comment.id));
+            const editButton = document.createElement('button');
+            editButton.classList.add('edit-comment-btn');
 
-            const deleteButton = commentElement.querySelector('.delete-comment-btn');
-            deleteButton?.addEventListener("click", () => deleteComment(commentElement, comment.id));
+            const editIcon = document.createElement('img');
+            editIcon.id = 'edit';
+            editIcon.classList.add('edit');
+            editIcon.src = '../images/pencil.png';
+
+            editButton.appendChild(editIcon);
+            editButton.addEventListener("click", () => editButtonClick(commentElement, comment.id));
+            pretitle.appendChild(editButton);
+
+            const deleteButton = document.createElement('button');
+            deleteButton.classList.add('delete-comment-btn');
+
+            const deleteIcon = document.createElement('img');
+            deleteIcon.id = 'delete';
+            deleteIcon.classList.add('delete');
+            deleteIcon.src = '../images/trash.png';
+
+            deleteButton.appendChild(deleteIcon);
+            deleteButton.addEventListener("click", () => deleteComment(commentElement, comment.id));
+            pretitle.appendChild(deleteButton);
         }
 
+        commentElement.appendChild(pretitle);
+
+        const editForm = document.createElement('div');
+        editForm.classList.add('edit-form');
+        commentElement.appendChild(editForm);
+
+        const content = document.createElement('div');
+        content.classList.add('content');
+        content.textContent = isDeleted ? '[Комментарий удален]' : comment.content;
+
+        if (comment.modifiedDate && comment.content) {
+            const modifiedDate = document.createElement('span');
+            modifiedDate.classList.add('modified-date');
+            modifiedDate.textContent = ' (изменен)';
+            content.appendChild(modifiedDate);
+        }
+
+        commentElement.appendChild(content);
+
+        const timeInfo = document.createElement('div');
+        timeInfo.classList.add('pretitle');
+        timeInfo.textContent = comment.modifiedDate
+            ? new Date(comment.modifiedDate).toLocaleString()
+            : new Date(comment.createTime).toLocaleString();
+        commentElement.appendChild(timeInfo);
+
         if (!comment.deleteDate && !isDeleted) {
-            const replyButton = document.createElement("button");
-            replyButton.textContent = "Ответить";
-            replyButton.classList.add("answer");
-            replyButton.setAttribute("data-id", comment.id);
-            commentElement.querySelector(".pretitle:last-child").appendChild(replyButton);
+            const replyButton = document.createElement('button');
+            replyButton.textContent = 'Ответить';
+            replyButton.classList.add('answer');
+            replyButton.setAttribute('data-id', comment.id);
 
             replyButton.addEventListener("click", () => answerButtonClick(commentElement, comment.id));
+            timeInfo.appendChild(replyButton);
         }
 
         if (comment.subComments > 0) {
-            const expandButton = document.createElement("button");
-            expandButton.textContent = "Раскрыть ответы";
-            expandButton.classList.add("show-more-button");
-            expandButton.setAttribute("data-id", comment.id);
+            const expandButton = document.createElement('button');
+            expandButton.textContent = 'Раскрыть ответы';
+            expandButton.classList.add('show-more-button');
+            expandButton.setAttribute('data-id', comment.id);
+
             commentElement.appendChild(expandButton);
         }
 

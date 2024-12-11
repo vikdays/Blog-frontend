@@ -2,6 +2,7 @@ import {fetchUserCommunities} from '../main/communities.mjs';
 import {fetchCommunities} from '../main/communities.mjs';
 import { getAddressId } from './createAddress.js';
 import '../profile/dropdownMenu.mjs';
+import '../profile/getProfile.js';
 
 const postId = localStorage.getItem('postId');
 const token = localStorage.getItem('token');
