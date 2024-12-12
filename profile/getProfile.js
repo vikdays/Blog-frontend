@@ -20,7 +20,6 @@ if (token) {
     })
     .catch(error => {
         console.error('Ошибка при выполнении запроса:', error.message);
-        alert('Время сессии истекло. Авторизуйтесь заново.');
         window.location.href = '../authorization/authorization.html';
     });
 } 

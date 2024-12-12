@@ -2,6 +2,7 @@ import { fetchCommunityId, fetchUserCommunities } from '../main/communities.mjs'
 import { renderPosts } from '../main/post.mjs';
 import { createPagination } from '../main/pagination.mjs';
 import { subscribeCommunity, unsubscribeCommunity } from '../communities/communities.js';
+import { likePost, dislikePost } from '../main/post.mjs';
 import '../profile/dropdownMenu.mjs';
 import '../profile/getProfile.js';
 const token = localStorage.getItem('token');

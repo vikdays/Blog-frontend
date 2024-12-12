@@ -51,8 +51,18 @@ async function editComment(commentId, token, data) {
 
         if (!response.ok) { 
             const errorText = await response.text();
-            console.error("Ошибка при отправке комментария. Статус:", response.status, "Ответ:", errorText);
-            return false;
+            try {
+                const errorObj = JSON.parse(errorText); 
+                if (errorObj.title) {
+                    alert(errorObj.title); 
+                } else {
+                    alert("Произошла ошибка: неизвестный формат ошибки");
+                }
+            } catch (e) {
+                console.error("Ошибка при отправке комментария. Статус:", response.status, "Ответ:", errorText);
+                alert("Произошла ошибка: " + errorText);
+            }
+            return false
         }
 
     } catch (error) {

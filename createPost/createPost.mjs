@@ -38,6 +38,7 @@ createButton.addEventListener("click", async (e) => {
             window.location.href = "http://127.0.0.1:5500/postPage/postPage.html";
         }
     } catch (error) {
+        
         console.error("Ошибка при загрузке постов:", error.message);
     }
 });
@@ -63,24 +64,32 @@ async function createNewPost(post, token) {
 
         if (!response.ok) { 
             const errorText = await response.text();
-            console.error(errorText);
-            if (response.status === 400) {
-                alert(response.title.message );
+            try {
+                const errorObj = JSON.parse(errorText); 
+                if (errorObj.title) {
+                    alert(errorObj.title); 
+                } else {
+                    alert("Произошла ошибка: неизвестный формат ошибки");
+                }
+            } catch (e) {
+                console.error("Ошибка при разборе ответа сервера:", e.message);
+                alert("Произошла ошибка: " + errorText);
             }
             return false;
-        }
-        else{
+        } else {
             const postIdRaw = await response.text();
             const postId = postIdRaw.replace(/['"]+/g, '');
             console.log(postId);
-            return postId
+            return postId;
         }
 
     } catch (error) {
-        console.error("Ошибка при отправке комментария", error.message);
+        console.error("Ошибка при отправке поста:", error.message);
+        alert("Произошла ошибка при отправке: " + error.message);
         return false;
     }
 }
+
 
 async function createCommunityPost(post, communityId, token) {
     try {
@@ -103,18 +112,28 @@ async function createCommunityPost(post, communityId, token) {
 
         if (!response.ok) { 
             const errorText = await response.text();
-            console.error(errorText);
+            try {
+                const errorObj = JSON.parse(errorText);
+                if (errorObj.title) {
+                    alert(`Ошибка: ${errorObj.title}`);
+                } else {
+                    alert("Произошла ошибка, но сервер не вернул подробностей.");
+                }
+            } catch (e) {
+                console.error("Ошибка при разборе ответа сервера:", e.message);
+                alert("Произошла ошибка: " + errorText);
+            }
             return false;
-        }
-        else{
+        } else {
             const postIdRaw = await response.text();
             const postId = postIdRaw.replace(/['"]+/g, '');
-            console.log(postId);
-            return postId
+            console.log("ID созданного поста:", postId);
+            return postId;
         }
 
     } catch (error) {
-        console.error("Ошибка при отправке комментария", error.message);
+        console.error("Ошибка при отправке поста:", error.message);
+        alert("Произошла ошибка при отправке поста: " + error.message);
         return false;
     }
 }
@@ -148,8 +167,6 @@ async function userCommunities() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-
-
     if (!token) {
         alert('Чтобы написать пост, необходимо авторизоваться');
         window.location.href = '../createPost/createPost.html'; 
