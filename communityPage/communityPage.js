@@ -93,12 +93,25 @@ async function renderCommunity() {
 
         const admins = document.createElement("div");
         admins.classList.add("admins");
-        admins.innerHTML = `${community.administrators.map(admin => `
-            <div class="admin-item">
-               <img src="../images/${admin.gender === "Male" ? "man1.png" : "women1.png"}" alt="${admin.gender}" class="admin-avatar"> 
-               <h3 class="title">${admin.fullName}</h3>
-          </div>
-       `).join('')}`;
+
+        community.administrators.forEach(admin => {
+            const adminItem = document.createElement("div");
+            adminItem.classList.add("admin-item");
+
+            const adminAvatar = document.createElement("img");
+            adminAvatar.src = `../images/${admin.gender === "Male" ? "man1.png" : "women1.png"}`;
+            adminAvatar.alt = admin.gender;
+            adminAvatar.classList.add("admin-avatar");
+
+            const adminTitle = document.createElement("h3");
+            adminTitle.classList.add("title");
+            adminTitle.textContent = admin.fullName;
+
+            adminItem.appendChild(adminAvatar);
+            adminItem.appendChild(adminTitle);
+
+            admins.appendChild(adminItem);
+        });
 
        communityAdmins.appendChild(h2);
        communityAdmins.appendChild(admins);
