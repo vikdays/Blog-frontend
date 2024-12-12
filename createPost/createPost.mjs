@@ -90,7 +90,6 @@ async function createNewPost(post, token) {
     }
 }
 
-
 async function createCommunityPost(post, communityId, token) {
     try {
         const response = await fetch(`https://blog.kreosoft.space/api/community/${communityId}/post`, {
@@ -136,9 +135,7 @@ async function createCommunityPost(post, communityId, token) {
         alert("Произошла ошибка при отправке поста: " + error.message);
         return false;
     }
-}
-
-async function userCommunities() {
+}async function userCommunities() {
     try {
         const userCommunities = await fetchUserCommunities(token);
         const allCommunities = await fetchCommunities();
@@ -146,9 +143,9 @@ async function userCommunities() {
             console.error('Community not found for user');
             return [];
         }
-        const adminCommunities = userCommunities.filter(
-            community => community.role === 'Administrator').
-            map(userCommunity => {
+        const adminCommunities = userCommunities
+            .filter(community => community.role === 'Administrator')
+            .map(userCommunity => {
                 const matchedCommunity = allCommunities.find(
                     community => community.id === userCommunity.communityId
                 );
@@ -158,9 +155,7 @@ async function userCommunities() {
                 };
             });
         return adminCommunities;
-        
-    }
-    catch (error) {
+    } catch (error) {
         console.error('Error verifying user role:', error.message);
         return [];
     }
@@ -171,43 +166,37 @@ document.addEventListener('DOMContentLoaded', async () => {
         alert('Чтобы написать пост, необходимо авторизоваться');
         window.location.href = '../createPost/createPost.html'; 
     }
+
     const communitySelect = document.getElementById('community');
 
     if (!communitySelect) {
         console.error('communitySelect not found');
-    } 
-    const adminCommunities = await userCommunities();
-    if (communityId) {
-        adminCommunities.forEach(community => {
-            if (community.id === communityId) {
-                const defaultOption = document.createElement('option');
-                defaultOption.value = community.id;
-                defaultOption.textContent = community.name;
-                communitySelect.appendChild(defaultOption);
-            }
-        });
+        return;
     }
-    else{
-        const defaultOption = document.createElement('option');
-        defaultOption.value = '';
-        defaultOption.textContent = 'Без группы';
-        communitySelect.appendChild(defaultOption);
-    
-        if (adminCommunities.length > 0) {
-            adminCommunities.forEach(community => {
-                const option = document.createElement('option');
-                option.value = community.id;
-                option.textContent = community.name;
-                communitySelect.appendChild(option);
 
-            });
-        }
-        else{
-            console.log('no admin communities');
-        }
+    const adminCommunities = await userCommunities();
+    const currentCommunityId = communityId || null;
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'Без группы';
+    communitySelect.appendChild(defaultOption);
+
+    if (adminCommunities.length > 0) {
+        adminCommunities.forEach(community => {
+            const option = document.createElement('option');
+            option.value = community.id;
+            option.textContent = community.name;
+
+            if (community.id === currentCommunityId) {
+                option.selected = true;
+            }
+            communitySelect.appendChild(option);
+        });
+    } else {
+        console.log('no admin communities');
     }
-    
 });
+
 
 function getCommunityId() {
     const communitySelect = document.getElementById('community');
