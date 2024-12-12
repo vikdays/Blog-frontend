@@ -208,7 +208,7 @@ document.getElementById("size").addEventListener("change", async (e) => {
     const urlParams = new URLSearchParams(window.location.search);
     const filters = {
         tags: urlParams.getAll('tags'),
-        postSorting: urlParams.get('sorting') || 'CreateDesc',
+        sorting: urlParams.get('sorting') || 'CreateDesc',
         page: 1,
         size: size,
     };

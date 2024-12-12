@@ -49,7 +49,7 @@ document.getElementById("size").addEventListener("change", async (e) => {
     const filters = {
         tags: urlParams.getAll('tags'),
         author: urlParams.get('author') || '',
-        postSorting: urlParams.get('sorting') || 'CreateDesc',
+        postSorting: urlParams.get('postSorting') || 'CreateDesc',
         onlyMyCommunities: urlParams.get('onlyMyCommunities') === 'true',
         min: document.getElementById("min").value,
         max: document.getElementById("max").value,
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const filters = {
         tags: urlParams.getAll('tags'),
         author: urlParams.get('author') || '',
-        postSorting: urlParams.get('sorting') || 'CreateDesc',
+        postSorting: urlParams.get('postSorting') || 'CreateDesc',
         onlyMyCommunities: urlParams.get('onlyMyCommunities') === 'true',
         min: document.getElementById("min").value,
         max: document.getElementById("max").value,

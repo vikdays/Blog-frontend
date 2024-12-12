@@ -11,6 +11,7 @@ if (token) {
         if (!response.ok) {
             console.error(`Ошибка авторизации: Статус ${response.status}`);
             alert('Время сессии истекло. Авторизуйтесь заново.');
+            localStorage.clear();
             window.location.href = '../authorization/authorization.html';
         }
         return response.json();
@@ -20,6 +21,7 @@ if (token) {
     })
     .catch(error => {
         console.error('Ошибка при выполнении запроса:', error.message);
+        localStorage.clear();
         window.location.href = '../authorization/authorization.html';
     });
 } 
